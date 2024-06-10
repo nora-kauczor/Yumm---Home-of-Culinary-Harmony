@@ -7,10 +7,15 @@ const NavList = styled.div`
   justify-content: space-around;
   list-style: none;
   width: 100%;
+  height: 50px;
 `;
 
 const NavBarItem = styled.a`
   width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.25rem;
 `;
 
 export function NavBar() {
@@ -25,7 +30,7 @@ export function NavBar() {
           router.push("/ingredients");
         }}
         style={{
-          backgroundColor: pathname === "/ingredients" ? "hotpink" : "grey",
+          backgroundColor: pathname === "/ingredients" ? "hotpink" : "white",
         }}
       >
         Ingredients
@@ -36,7 +41,7 @@ export function NavBar() {
           router.push("/pairings");
         }}
         style={{
-          backgroundColor: pathname === "/pairings" ? "hotpink" : "grey",
+          backgroundColor: pathname === "/pairings" ? "hotpink" : "white",
         }}
       >
         Pairings
