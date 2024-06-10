@@ -1,9 +1,13 @@
-import { ingredients } from "@/lib/ingredients";
 import { IngredientCard } from "./IngredientCard";
-import { useId } from "react";
 
-export function IngredientsOverview() {
-  return ingredients.map((ingredient) => (
-    <IngredientCard key={uid()} ingredient={ingredient} />
-  ));
+export function IngredientsOverview({ ingredients }) {
+  return (
+    <div>
+      {ingredients.forEach((ingredient) => console.log(ingredient))}
+      {ingredients.map((ingredient) => (
+        <IngredientCard key={ingredient._id} ingredient={ingredient} />
+      ))}
+      <p>hallo</p>
+    </div>
+  );
 }
