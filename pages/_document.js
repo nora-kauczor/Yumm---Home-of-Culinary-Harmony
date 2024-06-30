@@ -26,7 +26,7 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head />
+        <Head>Yumm! - Your guide to the ultimate taste</Head>
         <body>
           <Main />
           <NextScript />

@@ -1,7 +1,11 @@
 export default function HomePage() {
+  const Box = styled.div`
+    heigth: 20px;
+    z-index: 1:
+  `;
   return (
     <div>
-      <h1>Hello from Next.js</h1>
+      <Box>Hello from Next.js</Box>
     </div>
   );
 }
