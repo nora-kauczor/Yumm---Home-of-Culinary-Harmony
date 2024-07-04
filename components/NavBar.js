@@ -8,6 +8,8 @@ const NavList = styled.div`
   list-style: none;
   width: 100%;
   height: 50px;
+  position: sticky;
+  z-index: 1;
 `;
 
 const NavBarItem = styled.a`

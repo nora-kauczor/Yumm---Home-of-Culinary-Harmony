@@ -7,7 +7,6 @@ export function IngredientsOverview({ ingredients }) {
       {ingredients.map((ingredient) => (
         <IngredientCard key={ingredient._id} ingredient={ingredient} />
       ))}
-      <p>hallo</p>
     </div>
   );
 }

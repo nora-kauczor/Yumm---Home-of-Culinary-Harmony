@@ -1,3 +1,1 @@
-export default function PairingsPage() {
-  return <p>pairingspage</p>;
-}
+export default function PairingsPage() {}
