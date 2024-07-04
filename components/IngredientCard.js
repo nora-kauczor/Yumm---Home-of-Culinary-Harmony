@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const IngredientArticle = styled.article`
+const IngredientAnchor = styled.a`
   font-size: 17px;
   display: flex;
   width: 70%;
@@ -8,6 +8,7 @@ const IngredientArticle = styled.article`
   background-color: #f5f5f5;
   padding: 0 10px;
   border-radius: 1rem;
+  font-style: none;
 `;
 
 const IngredientName = styled.p`
@@ -22,13 +23,13 @@ const FlavourTag = styled.p`
 export function IngredientCard({ ingredient }) {
   const flavourLowerCase = ingredient.flavorProfile.toLowerCase();
   const colorString = `var(--${flavourLowerCase}-color)`;
-  console.log(colorString);
+
   return (
-    <IngredientArticle>
+    <IngredientAnchor href={`/${ingredient._id}`}>
       <IngredientName>{ingredient.name}</IngredientName>
       <FlavourTag style={{ backgroundColor: colorString }}>
         {ingredient.flavorProfile}
       </FlavourTag>
-    </IngredientArticle>
+    </IngredientAnchor>
   );
 }
