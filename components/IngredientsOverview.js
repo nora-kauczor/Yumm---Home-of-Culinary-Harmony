@@ -11,7 +11,6 @@ const IngredientList = styled.div`
 export function IngredientsOverview({ ingredients }) {
   return (
     <IngredientList>
-      {ingredients.forEach((ingredient) => console.log(ingredient))}
       {ingredients.map((ingredient) => (
         <IngredientCard key={ingredient._id} ingredient={ingredient} />
       ))}
