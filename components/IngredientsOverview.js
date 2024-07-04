@@ -4,8 +4,8 @@ import { IngredientCard } from "./IngredientCard";
 const IngredientList = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 10px;
-  border-radius: 1rem;
 `;
 
 export function IngredientsOverview({ ingredients }) {
