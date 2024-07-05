@@ -8,7 +8,8 @@ const IngredientAnchor = styled.a`
   background-color: #f5f5f5;
   padding: 0 10px;
   border-radius: 1rem;
-  font-style: none;
+  text-decoration: none;
+  color: inherit;
 `;
 
 const IngredientName = styled.p`
@@ -20,9 +21,10 @@ const FlavourTag = styled.p`
   border-radius: 1rem;
   padding: 10px;
 `;
+
 export function IngredientCard({ ingredient }) {
-  const flavourLowerCase = ingredient.flavorProfile.toLowerCase();
-  const colorString = `var(--${flavourLowerCase}-color)`;
+  const flavorLowerCase = ingredient.flavorProfile.toLowerCase();
+  const colorString = `var(--${flavorLowerCase}-color)`;
 
   return (
     <IngredientAnchor href={`/${ingredient._id}`}>
