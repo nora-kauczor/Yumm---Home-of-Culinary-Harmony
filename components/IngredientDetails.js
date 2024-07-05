@@ -16,8 +16,10 @@ const NameAndTag = styled.p`
   padding: 0;
 `;
 
-const Name = styled.h1`align-self; margin: 0;
-  padding: 10;`;
+const Name = styled.h1`
+  margin: 0;
+  padding: 10;
+`;
 
 const FlavorTag = styled.p`
   background-color: orange;
