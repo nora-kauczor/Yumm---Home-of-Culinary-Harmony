@@ -1,15 +1,58 @@
+import Image from "next/image";
+import styled from "styled-components";
+
+const DetailsContainer = styled.div`
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+`;
+const NameAndTag = styled.p`
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  margin: 0;
+  padding: 0;
+`;
+
+const Name = styled.h1`align-self; margin: 0;
+  padding: 10;`;
+
+const FlavorTag = styled.p`
+  background-color: orange;
+  border-radius: 1rem;
+  padding: 10px;
+  margin: 0;
+`;
+
+const BackLink = styled.a`
+  text-decoration: none;
+  color: inherit;
+  // width: 100%;
+  // align-self: left;
+`;
+
 export function IngredientDetails({ ingredient }) {
-  // console.log("Logg aus Komponente:", ingredient);
   if (!ingredient) return <>Loading...</>;
 
   const flavorLowerCase = ingredient.flavorProfile.toLowerCase();
   const colorString = `var(--${flavorLowerCase}-color)`;
   return (
-    <>
-      <h1>{ingredient.name}</h1>
-      <p style={{ backgroundColor: colorString }}>{ingredient.flavorProfile}</p>
-      <Image></Image>
-      <a href={"/ingredients"}>Back</a>
-    </>
+    <DetailsContainer>
+      <NameAndTag>
+        <Name>{ingredient.name}</Name>
+        <FlavorTag style={{ backgroundColor: colorString }}>
+          {ingredient.flavorProfile}
+        </FlavorTag>
+      </NameAndTag>
+      <Image
+        src={"/images/spices.jpg"}
+        alt="different grained spices"
+        width={300}
+        height={200}
+      />
+      <BackLink href={"/ingredients"}>Back</BackLink>
+    </DetailsContainer>
   );
 }
