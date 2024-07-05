@@ -16,7 +16,7 @@ const IngredientName = styled.p`
   padding: 10px;
 `;
 
-const FlavourTag = styled.p`
+const FlavorTag = styled.p`
   background-color: orange;
   border-radius: 1rem;
   padding: 10px;
@@ -29,9 +29,9 @@ export function IngredientCard({ ingredient }) {
   return (
     <IngredientAnchor href={`/${ingredient._id}`}>
       <IngredientName>{ingredient.name}</IngredientName>
-      <FlavourTag style={{ backgroundColor: colorString }}>
+      <FlavorTag style={{ backgroundColor: colorString }}>
         {ingredient.flavorProfile}
-      </FlavourTag>
+      </FlavorTag>
     </IngredientAnchor>
   );
 }
