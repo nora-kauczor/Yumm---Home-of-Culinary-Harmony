@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
 import styled from "styled-components";
 
 const NavList = styled.div`

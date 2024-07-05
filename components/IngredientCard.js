@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const IngredientArticle = styled.article`
+const IngredientAnchor = styled.a`
   font-size: 17px;
   display: flex;
   width: 70%;
@@ -8,6 +8,8 @@ const IngredientArticle = styled.article`
   background-color: #f5f5f5;
   padding: 0 10px;
   border-radius: 1rem;
+  text-decoration: none;
+  color: inherit;
 `;
 
 const IngredientName = styled.p`
@@ -19,16 +21,17 @@ const FlavourTag = styled.p`
   border-radius: 1rem;
   padding: 10px;
 `;
+
 export function IngredientCard({ ingredient }) {
-  const flavourLowerCase = ingredient.flavorProfile.toLowerCase();
-  const colorString = `var(--${flavourLowerCase}-color)`;
-  console.log(colorString);
+  const flavorLowerCase = ingredient.flavorProfile.toLowerCase();
+  const colorString = `var(--${flavorLowerCase}-color)`;
+
   return (
-    <IngredientArticle>
+    <IngredientAnchor href={`/${ingredient._id}`}>
       <IngredientName>{ingredient.name}</IngredientName>
       <FlavourTag style={{ backgroundColor: colorString }}>
         {ingredient.flavorProfile}
       </FlavourTag>
-    </IngredientArticle>
+    </IngredientAnchor>
   );
 }
