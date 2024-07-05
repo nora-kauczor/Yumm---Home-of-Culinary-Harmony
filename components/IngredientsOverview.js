@@ -1,9 +1,14 @@
 import styled from "styled-components";
 import { IngredientCard } from "./IngredientCard";
 import { flavors } from "@/lib/ingredients";
-import { useState } from "react";
+import { useId, useState } from "react";
+import { uid } from "uid";
 
-const OverviewContainer = styled.div``;
+const OverviewContainer = styled.div`
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: center;
+`;
 const FilterSection = styled.div``;
 const FilterField = styled.input``;
 const DropDown = styled.div`
@@ -11,7 +16,7 @@ const DropDown = styled.div`
   flex-direction: column;
   z-index: 3;
 `;
-
+const DropDownItem = styled.button``;
 const IngredientList = styled.div`
   display: flex;
   flex-direction: column;
@@ -21,7 +26,9 @@ const IngredientList = styled.div`
 
 export function IngredientsOverview({ ingredients }) {
   const [filteredFlavors, setFilteredFlavors] = useState();
+  const [filteredIngredients, setFilteredIngredients] = useState(ingredients);
 
+  // when user types
   function handleChange() {
     const input = event.target.value;
     const lowerCaseInput = input.toLowerCase();
@@ -32,10 +39,21 @@ export function IngredientsOverview({ ingredients }) {
     const capitalizedMatchingFlavors = matchingFlavors.map(
       (flavor) => flavor.charAt(0).toUpperCase() + flavor.slice(1)
     );
-
     input
       ? setFilteredFlavors(capitalizedMatchingFlavors)
       : setFilteredFlavors();
+    const matchingIngredients = ingredients.filter((ingredient) =>
+      capitalizedMatchingFlavors.includes(ingredient.flavorProfile)
+    );
+    setFilteredIngredients(matchingIngredients);
+  }
+
+  function handleClick(clickedFlavor) {
+    // setFilteredFlavors("");
+    const ingredientsAfterClick = ingredients.filter(
+      (ingredient) => ingredient.flavorProfile === clickedFlavor
+    );
+    setFilteredIngredients(ingredientsAfterClick);
   }
 
   return (
@@ -45,14 +63,19 @@ export function IngredientsOverview({ ingredients }) {
         {filteredFlavors && (
           <DropDown>
             {filteredFlavors.map((flavor) => (
-              <>{flavor}</>
+              <DropDownItem
+                type="button"
+                key={uid()}
+                onClick={handleClick(flavor)}
+              >
+                {flavor}
+              </DropDownItem>
             ))}
           </DropDown>
         )}
       </FilterSection>
-
       <IngredientList>
-        {ingredients.map((ingredient) => (
+        {filteredIngredients.map((ingredient) => (
           <IngredientCard key={ingredient._id} ingredient={ingredient} />
         ))}
       </IngredientList>
