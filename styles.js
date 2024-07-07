@@ -15,6 +15,7 @@ export default createGlobalStyle`
 
   body {
     margin: 0;
+    padding: 0;
     font-family: ${epilogue.style.fontFamily};
 --navbar-height: 50px;
 --sweet-color: #FFDEE4;   

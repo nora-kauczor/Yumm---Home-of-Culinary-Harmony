@@ -3,7 +3,7 @@ import styled from "styled-components";
 const IngredientAnchor = styled.a`
   font-size: 17px;
   display: flex;
-  width: 70%;
+  width: 100%;
   justify-content: space-between;
   background-color: #f5f5f5;
   padding: 0 10px;
