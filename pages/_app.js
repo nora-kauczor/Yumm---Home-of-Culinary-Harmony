@@ -1,6 +1,8 @@
 import { Layout } from "@/components/Layout";
 import GlobalStyle from "../styles";
 import { SWRConfig } from "swr";
+import { useState } from "react";
+import { ingredients } from "@/lib/ingredients";
 
 const fetcher = async (url) => {
   const res = await fetch(url);

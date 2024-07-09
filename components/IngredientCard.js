@@ -1,37 +1,52 @@
 import styled from "styled-components";
 
-const IngredientAnchor = styled.a`
+const CardWrapper = styled.div`
   font-size: 17px;
   display: flex;
   width: 100%;
   justify-content: space-between;
   background-color: #f5f5f5;
-  padding: 0 10px;
+  padding: 20px;
   border-radius: 1rem;
+`;
+
+const IngredientName = styled.a`
+  padding: 10px;
+  font-size: 17px;
+  display: flex;
+  width: 100%;
   text-decoration: none;
   color: inherit;
 `;
 
-const IngredientName = styled.p`
-  padding: 10px;
-`;
-
-const FlavorTag = styled.p`
-  background-color: orange;
+const FlavorTag = styled.a`
   border-radius: 1rem;
   padding: 10px;
 `;
 
-export function IngredientCard({ ingredient }) {
+const EditButton = styled.a`
+  border-radius: 1rem;
+  padding: 10px;
+  text-decoration: none;
+  color: inherit;
+`;
+
+export function IngredientCard({ ingredient, handleClickFlavor }) {
   const flavorLowerCase = ingredient.flavorProfile.toLowerCase();
   const colorString = `var(--${flavorLowerCase}-color)`;
 
   return (
-    <IngredientAnchor href={`/${ingredient._id}`}>
-      <IngredientName>{ingredient.name}</IngredientName>
-      <FlavorTag style={{ backgroundColor: colorString }}>
+    <CardWrapper>
+      <IngredientName href={`/${ingredient._id}`}>
+        {ingredient.name}
+      </IngredientName>
+      <FlavorTag
+        style={{ backgroundColor: colorString }}
+        onClick={() => handleClickFlavor(ingredient.flavorProfile)}
+      >
         {ingredient.flavorProfile}
       </FlavorTag>
-    </IngredientAnchor>
+      <EditButton href={`/form/${ingredient._id}`}>Edit</EditButton>
+    </CardWrapper>
   );
 }

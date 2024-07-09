@@ -7,8 +7,7 @@ const NavList = styled.div`
   list-style: none;
   width: 100%;
   height: var(--navbar-height);
-  // calculate distance to top according to a display of 375 x 667 px
-  top: calc(677px - var(--navbar-height));
+  bottom: 0;
   position: fixed;
   z-index: 1;
 `;

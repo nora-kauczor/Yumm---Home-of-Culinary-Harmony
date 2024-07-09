@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { IngredientCard } from "./IngredientCard";
-import { flavors } from "@/lib/ingredients";
+import { flavors, ingredients } from "@/lib/ingredients";
 import { useState } from "react";
 import { uid } from "uid";
 
@@ -85,14 +85,23 @@ const IngredientList = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
 `;
 
-export function IngredientsOverview({ ingredients }) {
-  const [filteredFlavors, setFilteredFlavors] = useState();
-  const [filterResults, setFilterResults] = useState(ingredients);
+export function IngredientsOverview({}) {
   const [noResults, setNoResults] = useState(false);
+  const [filteredFlavors, setFilteredFlavors] = useState();
   const [userInput, setUserInput] = useState();
+  const [filterResults, setFilterResults] = useState(ingredients);
+
+  function handleClickFlavor(clickedFlavor) {
+    setFilteredFlavors("");
+    const ingredientsAfterClick = ingredients.filter(
+      (ingredient) => ingredient.flavorProfile === clickedFlavor
+    );
+    setFilterResults(ingredientsAfterClick);
+    setUserInput("");
+  }
 
   function handleChange() {
     const input = event.target.value;
@@ -127,15 +136,6 @@ export function IngredientsOverview({ ingredients }) {
     );
     setFilterResults(matchingIngredients);
     setNoResults(false);
-  }
-
-  function handleClickFlavor(clickedFlavor) {
-    setFilteredFlavors("");
-    const ingredientsAfterClick = ingredients.filter(
-      (ingredient) => ingredient.flavorProfile === clickedFlavor
-    );
-    setFilterResults(ingredientsAfterClick);
-    setUserInput("");
   }
 
   function handleClickReset() {
@@ -178,7 +178,11 @@ export function IngredientsOverview({ ingredients }) {
       </FilterSection>
       <IngredientList>
         {filterResults.map((ingredient) => (
-          <IngredientCard key={ingredient._id} ingredient={ingredient} />
+          <IngredientCard
+            key={ingredient._id}
+            ingredient={ingredient}
+            handleClickFlavor={handleClickFlavor}
+          />
         ))}
       </IngredientList>
     </OverviewContainer>
