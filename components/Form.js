@@ -1,4 +1,8 @@
+import { flavors } from "@/lib/ingredients";
+import { useState } from "react";
 import styled from "styled-components";
+import { uid } from "uid";
+import React, { useRef } from "react";
 
 const FormWrapper = styled.form`
   width: 80%;
@@ -12,26 +16,146 @@ const SingleInputSection = styled.div`
   gap: 5px;
 `;
 const InputLabel = styled.label``;
-const InputField = styled.input``;
+const InputField = styled.input`
+  // width: 100%;
+  // padding: 7px 5px 5px 5px;
+  // margin: 0;
+  // position: absolute;
+  // font-family: var(--general-font);
+`;
+const LabelAndMessage = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 30px;
+`;
+const NoResultsMessage = styled.p`
+  color: red;
+  margin: 0;
+  padding: 0;
+`;
+
+const FieldAndDropDown = styled.div`
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  position: relative;
+`;
+
+const DropDown = styled.ul`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 3;
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  top: 29px;
+  border: 1px solid black;
+  border-top: none;
+`;
+
+const DropDownItem = styled.button`
+  text-align: left;
+  font-family: var(--general-font);
+  font-size: 15px;
+  border: none;
+  padding: 5px;
+  background-color: white;
+`;
+
+const SelectedFlavors = styled.ul`
+  list-style: none;
+`;
+const FlavorTag = styled.li`
+  border-radius: 1rem;
+  padding: 10px;
+`;
 
 const SubmitButton = styled.button``;
 
 export function Form() {
+  const [filteredFlavors, setFilteredFlavors] = useState();
+  const [noResults, setNoResults] = useState(false);
+  const [userFlavors, setUserFlavors] = useState([]);
+
+  const inputRef = useRef(null);
+  function handleChange() {
+    const input = event.target.value;
+    const lowerCaseInput = input.toLowerCase();
+    const lowerCaseFlavors = flavors.map((flavor) => flavor.toLowerCase());
+    const matchingFlavors = lowerCaseFlavors.filter((flavor) =>
+      flavor.startsWith(lowerCaseInput)
+    );
+    // if there's no matching flavors, set back filtered flavors (drop down options) and display error message and return
+    if (matchingFlavors.length === 0) {
+      setNoResults(true);
+      return;
+    }
+    // else, set matching flavors (have them displayed in drop down)
+    const capitalizedMatchingFlavors = matchingFlavors.map(
+      (flavor) => flavor.charAt(0).toUpperCase() + flavor.slice(1)
+    );
+    setFilteredFlavors(capitalizedMatchingFlavors);
+    setNoResults(false);
+  }
+
+  function handleClickFlavor(clickedFlavor) {
+    setFilteredFlavors("");
+    setUserFlavors([clickedFlavor, ...userFlavors]);
+  }
+
+  console.log(userFlavors);
+
   return (
     <FormWrapper>
       <SingleInputSection>
         <InputLabel>Name</InputLabel>
-        <InputField></InputField>
+        <InputField type="text" />
       </SingleInputSection>
       <SingleInputSection>
-        <InputLabel>Flavor Tag</InputLabel>
-        <InputField></InputField>
+        <LabelAndMessage>
+          <InputLabel>Flavor Tag</InputLabel>
+          {noResults && <NoResultsMessage>No Results</NoResultsMessage>}
+        </LabelAndMessage>
+        <FieldAndDropDown>
+          <InputField type="text" ref={inputRef} onChange={handleChange} />
+          {filteredFlavors && (
+            <DropDown>
+              {filteredFlavors.map((flavor) => (
+                <DropDownItem
+                  type="button"
+                  key={uid()}
+                  onClick={() => {
+                    handleClickFlavor(flavor);
+                  }}
+                >
+                  {flavor}
+                </DropDownItem>
+              ))}
+            </DropDown>
+          )}
+        </FieldAndDropDown>
+        {userFlavors && (
+          <SelectedFlavors>
+            {userFlavors.map((flavor) => (
+              <FlavorTag
+                key={uid()}
+                style={{
+                  backgroundColor: `var(--${flavor.toLowerCase()}-color)`,
+                }}
+              >
+                {flavor}
+                <button>X</button>
+              </FlavorTag>
+            ))}
+          </SelectedFlavors>
+        )}
       </SingleInputSection>
       <SingleInputSection>
         <InputLabel>Image-URL</InputLabel>
-        <InputField></InputField>
+        <InputField type="text" />
       </SingleInputSection>
-      <SubmitButton>Submit</SubmitButton>
+      <SubmitButton type="submit">Submit</SubmitButton>
     </FormWrapper>
   );
 }
