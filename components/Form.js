@@ -1,8 +1,7 @@
 import { flavors } from "@/lib/ingredients";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { uid } from "uid";
-import React, { useRef } from "react";
 
 const FormWrapper = styled.form`
   width: 80%;
@@ -73,14 +72,33 @@ const FlavorTag = styled.li`
 
 const SubmitButton = styled.button``;
 
-export function Form() {
+export function Form({ ingredient }) {
   const [filteredFlavors, setFilteredFlavors] = useState();
   const [noResults, setNoResults] = useState(false);
   const [userFlavors, setUserFlavors] = useState([]);
+  const [flavorSearchTerm, setFlavorSearchTerm] = useState();
 
-  const inputRef = useRef(null);
-  function handleChange() {
+  useEffect(() => {
+    if (!ingredient) {
+      return;
+    }
+    setUserFlavors([ingredient.flavorProfile]);
+  }, [ingredient]);
+
+  if (!ingredient) {
+    return <div>Loading...</div>;
+  }
+
+  function handleChange(event) {
     const input = event.target.value;
+    setFlavorSearchTerm(input);
+    // if input field is empty, set back filtered flavors (drop down options) and message and return
+    if (!input) {
+      setNoResults(false);
+      setFilteredFlavors();
+      return;
+    }
+    // else, find matching flavors
     const lowerCaseInput = input.toLowerCase();
     const lowerCaseFlavors = flavors.map((flavor) => flavor.toLowerCase());
     const matchingFlavors = lowerCaseFlavors.filter((flavor) =>
@@ -101,16 +119,23 @@ export function Form() {
 
   function handleClickFlavor(clickedFlavor) {
     setFilteredFlavors("");
+    setFlavorSearchTerm("");
     setUserFlavors([clickedFlavor, ...userFlavors]);
   }
 
-  console.log(userFlavors);
+  // function removeFlavor(flavorToRemove) {
+  //   const flavors = userFlavors;
+  //   const flavorsWithoutDeletedOne = flavors.filter(
+  //     (flavor) => flavor === flavorToRemove
+  //   );
+  //   setUserFlavors(flavorsWithoutDeletedOne);
+  // }
 
   return (
     <FormWrapper>
       <SingleInputSection>
         <InputLabel>Name</InputLabel>
-        <InputField type="text" />
+        <InputField type="text" inputValue={ingredient.name} />
       </SingleInputSection>
       <SingleInputSection>
         <LabelAndMessage>
@@ -118,7 +143,11 @@ export function Form() {
           {noResults && <NoResultsMessage>No Results</NoResultsMessage>}
         </LabelAndMessage>
         <FieldAndDropDown>
-          <InputField type="text" ref={inputRef} onChange={handleChange} />
+          <InputField
+            type="text"
+            onChange={handleChange}
+            value={flavorSearchTerm}
+          />
           {filteredFlavors && (
             <DropDown>
               {filteredFlavors.map((flavor) => (
@@ -145,9 +174,23 @@ export function Form() {
                 }}
               >
                 {flavor}
-                <button>X</button>
+                <button
+                // onClick={() => {
+                //   removeFlavor(flavor);
+                // }}
+                >
+                  X
+                </button>
               </FlavorTag>
             ))}
+            {/* <FlavorTag
+              style={{
+                backgroundColor: `var(--${ingredient.flavorProfile.toLowerCase()}-color)`,
+              }}
+            >
+              {ingredient.flavorProfile}
+              <button>X</button>
+            </FlavorTag> */}
           </SelectedFlavors>
         )}
       </SingleInputSection>
