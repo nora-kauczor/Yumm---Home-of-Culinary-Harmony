@@ -123,13 +123,14 @@ export function Form({ ingredient }) {
     setUserFlavors([clickedFlavor, ...userFlavors]);
   }
 
-  // function removeFlavor(flavorToRemove) {
-  //   const flavors = userFlavors;
-  //   const flavorsWithoutDeletedOne = flavors.filter(
-  //     (flavor) => flavor === flavorToRemove
-  //   );
-  //   setUserFlavors(flavorsWithoutDeletedOne);
-  // }
+  function removeFlavor(flavorToRemove) {
+    const flavors = userFlavors;
+    const flavorsWithoutDeletedOne = flavors.filter(
+      (flavor) => flavor !== flavorToRemove
+    );
+    setUserFlavors(flavorsWithoutDeletedOne);
+    // setUserFlavors();
+  }
 
   return (
     <FormWrapper>
@@ -175,9 +176,9 @@ export function Form({ ingredient }) {
               >
                 {flavor}
                 <button
-                // onClick={() => {
-                //   removeFlavor(flavor);
-                // }}
+                  onClick={() => {
+                    removeFlavor(flavor);
+                  }}
                 >
                   X
                 </button>
