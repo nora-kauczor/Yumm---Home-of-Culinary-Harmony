@@ -72,11 +72,26 @@ const FlavorTag = styled.li`
 
 const SubmitButton = styled.button``;
 
+const CancelButton = styled.button``;
+
 export function Form({ ingredient }) {
   const [filteredFlavors, setFilteredFlavors] = useState();
   const [noResults, setNoResults] = useState(false);
   const [userFlavors, setUserFlavors] = useState([]);
   const [flavorSearchTerm, setFlavorSearchTerm] = useState();
+  const [nameInput, setNameInput] = useState("");
+  useEffect(() => {
+    if (ingredient) {
+      setNameInput(ingredient.name);
+    }
+  }, [ingredient]);
+
+  function handleNameChange() {
+    const newName = event.target.value;
+    ingredient.name = newName;
+    console.log(ingredient.name);
+    setNameInput(newName);
+  }
 
   useEffect(() => {
     if (!ingredient) {
@@ -129,23 +144,41 @@ export function Form({ ingredient }) {
       (flavor) => flavor !== flavorToRemove
     );
     setUserFlavors(flavorsWithoutDeletedOne);
-    // setUserFlavors();
   }
+
+  function submit(event) {
+    console.log("hallo");
+    event.preventDefault();
+    const data = new FormData(event.target);
+    const userIngredient = Object.fromEntries(data);
+    console.log(userIngredient);
+    // router.push("/ingredients");
+  }
+
+  // function cancel() {
+  //   router.push("/ingredients");
+  // }
 
   return (
     <FormWrapper>
       <SingleInputSection>
-        <InputLabel>Name</InputLabel>
-        <InputField type="text" inputValue={ingredient.name} />
+        <InputLabel htmlFor="input-ingredient">Name</InputLabel>
+        <InputField
+          type="text"
+          id="input-ingredient"
+          value={ingredient.name}
+          onChange={handleNameChange}
+        />
       </SingleInputSection>
       <SingleInputSection>
         <LabelAndMessage>
-          <InputLabel>Flavor Tag</InputLabel>
+          <InputLabel htmlFor="input-flavor">Flavor Tag</InputLabel>
           {noResults && <NoResultsMessage>No Results</NoResultsMessage>}
         </LabelAndMessage>
         <FieldAndDropDown>
           <InputField
             type="text"
+            id="input-flavor"
             onChange={handleChange}
             value={flavorSearchTerm}
           />
@@ -196,10 +229,13 @@ export function Form({ ingredient }) {
         )}
       </SingleInputSection>
       <SingleInputSection>
-        <InputLabel>Image-URL</InputLabel>
-        <InputField type="text" />
+        <InputLabel htmlFor="input-url">Image-URL</InputLabel>
+        <InputField type="text" id="input-url" />
       </SingleInputSection>
-      <SubmitButton type="submit">Submit</SubmitButton>
+      <SubmitButton type="submit" onClick={() => submit()}>
+        Submit
+      </SubmitButton>
+      <CancelButton onClick={() => cancelAnimationFrame()}>Cancel</CancelButton>
     </FormWrapper>
   );
 }
