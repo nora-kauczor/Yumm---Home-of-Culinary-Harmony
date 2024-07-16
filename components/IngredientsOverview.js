@@ -88,6 +88,10 @@ const IngredientList = styled.div`
   gap: 20px;
 `;
 
+const WhiteSpace = styled.div`
+  height: 45px;
+`;
+
 export function IngredientsOverview({ ingredients }) {
   const [noResults, setNoResults] = useState(false);
   const [filteredFlavors, setFilteredFlavors] = useState();
@@ -195,6 +199,7 @@ export function IngredientsOverview({ ingredients }) {
             />
           ))}
       </IngredientList>
+      <WhiteSpace />
     </OverviewContainer>
   );
 }

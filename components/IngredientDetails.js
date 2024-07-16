@@ -49,7 +49,7 @@ export function IngredientDetails({ ingredient }) {
         </FlavorTag>
       </NameAndTag>
       <Image
-        src={"/images/spices.jpg"}
+        src={ingredient.url ? ingredient.url : "/images/spices.jpg"}
         alt="different grained spices"
         width={300}
         height={200}

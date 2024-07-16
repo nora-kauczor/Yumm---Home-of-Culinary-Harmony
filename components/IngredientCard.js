@@ -41,7 +41,7 @@ export function IngredientCard({ ingredient, handleClickFlavor }) {
         {ingredient.name}
       </IngredientName>
       <FlavorTag
-        // style={{ backgroundColor: colorString }}
+        style={{ backgroundColor: colorString }}
         onClick={() => handleClickFlavor(ingredient.flavorProfile)}
       >
         {ingredient.flavorProfile}
