@@ -144,7 +144,6 @@ export function Form({ ingredient, editIngredients }) {
 
   function handleSubmit() {
     event.preventDefault();
-    console.log(selectedFlavors);
     if (selectedFlavors.length === 0) {
       setMessage("Select at least one flavor");
       return;

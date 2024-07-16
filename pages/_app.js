@@ -19,14 +19,20 @@ export default function App({ Component, pageProps }) {
   const [ingredients, setIngredients] = useState(initialIngredients);
 
   function editIngredients(editedIngredient) {
-    const arrayWithoutOldObject = ingredients.filter(
-      (ingredient) => ingredient._id !== editedIngredient._id
+    // const arrayWithoutOldObject = ingredients.filter(
+    //   (ingredient) => ingredient._id !== editedIngredient._id
+    // );
+    const index = ingredients.findIndex(
+      (ingredient) => ingredient._id === editedIngredient._id
     );
-    const updatedIngredientsArray = [
-      ...arrayWithoutOldObject,
-      editedIngredient,
-    ];
-    setIngredients(updatedIngredientsArray);
+    const updatedIngredients = ingredients;
+    updatedIngredients[index] = editedIngredient;
+    // const updatedIngredientsArray = [
+    //   ...arrayWithoutOldObject,
+    //   editedIngredient,
+    // ];
+    console.log(updatedIngredients);
+    setIngredients(updatedIngredients);
   }
 
   return (
