@@ -3,6 +3,7 @@ import GlobalStyle from "../styles";
 import { SWRConfig } from "swr";
 import { useState } from "react";
 import { initialIngredients } from "@/lib/ingredients";
+import useLocalStorageState from "use-local-storage-state";
 
 const fetcher = async (url) => {
   const res = await fetch(url);
@@ -16,24 +17,21 @@ const fetcher = async (url) => {
 };
 
 export default function App({ Component, pageProps }) {
-  const [ingredients, setIngredients] = useState(initialIngredients);
+  const [ingredients, setIngredients] = useLocalStorageState("key", {
+    defaultValue: initialIngredients,
+  });
 
   function editIngredients(editedIngredient) {
-    // const arrayWithoutOldObject = ingredients.filter(
-    //   (ingredient) => ingredient._id !== editedIngredient._id
-    // );
     const index = ingredients.findIndex(
       (ingredient) => ingredient._id === editedIngredient._id
     );
     const updatedIngredients = ingredients;
     updatedIngredients[index] = editedIngredient;
-    // const updatedIngredientsArray = [
-    //   ...arrayWithoutOldObject,
-    //   editedIngredient,
-    // ];
     console.log(updatedIngredients);
     setIngredients(updatedIngredients);
   }
+
+  console.log("log aus _app.js ", ingredients[0]);
 
   return (
     <>
