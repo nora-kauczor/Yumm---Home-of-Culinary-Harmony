@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { uid } from "uid";
 
-const FormWrapper = styled.form`
+const StyledForm = styled.form`
   width: 80%;
   display: flex;
   flex-direction: column;
@@ -69,17 +69,19 @@ const FlavorTag = styled.li`
   border-radius: 1rem;
   padding: 10px;
 `;
+const DeleteFlavorButton = styled.button``;
 
 const SubmitButton = styled.button``;
 
 const CancelButton = styled.button``;
 
-export function Form({ ingredient }) {
+export function Form({ ingredient, editIngredients }) {
   const [filteredFlavors, setFilteredFlavors] = useState();
   const [noResults, setNoResults] = useState(false);
-  const [userFlavors, setUserFlavors] = useState([]);
+  const [selectedFlavors, setSelectedFlavors] = useState([]);
   const [flavorSearchTerm, setFlavorSearchTerm] = useState();
   const [nameInput, setNameInput] = useState("");
+
   useEffect(() => {
     if (ingredient) {
       setNameInput(ingredient.name);
@@ -89,7 +91,6 @@ export function Form({ ingredient }) {
   function handleNameChange() {
     const newName = event.target.value;
     ingredient.name = newName;
-    console.log(ingredient.name);
     setNameInput(newName);
   }
 
@@ -97,34 +98,30 @@ export function Form({ ingredient }) {
     if (!ingredient) {
       return;
     }
-    setUserFlavors([ingredient.flavorProfile]);
+    setSelectedFlavors([ingredient.flavorProfile]);
   }, [ingredient]);
 
   if (!ingredient) {
     return <div>Loading...</div>;
   }
 
-  function handleChange(event) {
+  function handleFlavorChange(event) {
     const input = event.target.value;
     setFlavorSearchTerm(input);
-    // if input field is empty, set back filtered flavors (drop down options) and message and return
     if (!input) {
       setNoResults(false);
       setFilteredFlavors();
       return;
     }
-    // else, find matching flavors
     const lowerCaseInput = input.toLowerCase();
     const lowerCaseFlavors = flavors.map((flavor) => flavor.toLowerCase());
     const matchingFlavors = lowerCaseFlavors.filter((flavor) =>
       flavor.startsWith(lowerCaseInput)
     );
-    // if there's no matching flavors, set back filtered flavors (drop down options) and display error message and return
     if (matchingFlavors.length === 0) {
       setNoResults(true);
       return;
     }
-    // else, set matching flavors (have them displayed in drop down)
     const capitalizedMatchingFlavors = matchingFlavors.map(
       (flavor) => flavor.charAt(0).toUpperCase() + flavor.slice(1)
     );
@@ -135,37 +132,41 @@ export function Form({ ingredient }) {
   function handleClickFlavor(clickedFlavor) {
     setFilteredFlavors("");
     setFlavorSearchTerm("");
-    setUserFlavors([clickedFlavor, ...userFlavors]);
+    setSelectedFlavors([clickedFlavor, ...selectedFlavors]);
   }
 
   function removeFlavor(flavorToRemove) {
-    const flavors = userFlavors;
+    console.log("works");
+    const flavors = selectedFlavors;
     const flavorsWithoutDeletedOne = flavors.filter(
       (flavor) => flavor !== flavorToRemove
     );
-    setUserFlavors(flavorsWithoutDeletedOne);
+    setSelectedFlavors(flavorsWithoutDeletedOne);
   }
 
-  function submit(event) {
-    console.log("hallo");
+  function handleSubmit() {
     event.preventDefault();
     const data = new FormData(event.target);
     const userIngredient = Object.fromEntries(data);
-    console.log(userIngredient);
+    userIngredient.flavorProfile = selectedFlavors[0]; // if only one flavor is selected for now
+    userIngredient._id = ingredient._id;
+    editIngredients(userIngredient);
+
     // router.push("/ingredients");
   }
 
-  // function cancel() {
-  //   router.push("/ingredients");
-  // }
+  function cancel() {
+    router.push("/ingredients");
+  }
 
   return (
-    <FormWrapper>
+    <StyledForm onSubmit={handleSubmit}>
       <SingleInputSection>
         <InputLabel htmlFor="input-ingredient">Name</InputLabel>
         <InputField
           type="text"
           id="input-ingredient"
+          name="name"
           value={ingredient.name}
           onChange={handleNameChange}
         />
@@ -179,7 +180,8 @@ export function Form({ ingredient }) {
           <InputField
             type="text"
             id="input-flavor"
-            onChange={handleChange}
+            name="flavorProfile"
+            onChange={handleFlavorChange}
             value={flavorSearchTerm}
           />
           {filteredFlavors && (
@@ -198,9 +200,9 @@ export function Form({ ingredient }) {
             </DropDown>
           )}
         </FieldAndDropDown>
-        {userFlavors && (
+        {selectedFlavors && (
           <SelectedFlavors>
-            {userFlavors.map((flavor) => (
+            {selectedFlavors.map((flavor) => (
               <FlavorTag
                 key={uid()}
                 style={{
@@ -208,34 +210,25 @@ export function Form({ ingredient }) {
                 }}
               >
                 {flavor}
-                <button
+                <DeleteFlavorButton
+                  type="button"
                   onClick={() => {
                     removeFlavor(flavor);
                   }}
                 >
                   X
-                </button>
+                </DeleteFlavorButton>
               </FlavorTag>
             ))}
-            {/* <FlavorTag
-              style={{
-                backgroundColor: `var(--${ingredient.flavorProfile.toLowerCase()}-color)`,
-              }}
-            >
-              {ingredient.flavorProfile}
-              <button>X</button>
-            </FlavorTag> */}
           </SelectedFlavors>
         )}
       </SingleInputSection>
       <SingleInputSection>
         <InputLabel htmlFor="input-url">Image-URL</InputLabel>
-        <InputField type="text" id="input-url" />
+        <InputField type="url" id="input-url" name="url" />
       </SingleInputSection>
-      <SubmitButton type="submit" onClick={() => submit()}>
-        Submit
-      </SubmitButton>
-      <CancelButton onClick={() => cancelAnimationFrame()}>Cancel</CancelButton>
-    </FormWrapper>
+      <SubmitButton type="submit">Submit</SubmitButton>
+      <CancelButton onClick={() => cancel()}>Cancel</CancelButton>
+    </StyledForm>
   );
 }

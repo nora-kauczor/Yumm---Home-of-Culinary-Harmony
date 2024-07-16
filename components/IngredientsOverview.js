@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { IngredientCard } from "./IngredientCard";
-import { flavors, ingredients } from "@/lib/ingredients";
-import { useState } from "react";
+import { flavors } from "@/lib/ingredients";
+import { useEffect, useState } from "react";
 import { uid } from "uid";
 
 const OverviewContainer = styled.div`
@@ -88,11 +88,20 @@ const IngredientList = styled.div`
   gap: 20px;
 `;
 
-export function IngredientsOverview({}) {
+export function IngredientsOverview({ ingredients }) {
   const [noResults, setNoResults] = useState(false);
   const [filteredFlavors, setFilteredFlavors] = useState();
   const [userInput, setUserInput] = useState();
-  const [filterResults, setFilterResults] = useState(ingredients);
+  const [filterResults, setFilterResults] = useState();
+
+  useEffect(() => {
+    if (!ingredients) {
+      return;
+    }
+    setFilterResults(ingredients);
+  }, [ingredients]);
+
+  if (!ingredients) return <>Loading...</>;
 
   function handleClickFlavor(clickedFlavor) {
     setFilteredFlavors("");
@@ -177,13 +186,14 @@ export function IngredientsOverview({}) {
         </FieldDropDownAndButtonWrapper>
       </FilterSection>
       <IngredientList>
-        {filterResults.map((ingredient) => (
-          <IngredientCard
-            key={ingredient._id}
-            ingredient={ingredient}
-            handleClickFlavor={handleClickFlavor}
-          />
-        ))}
+        {filterResults &&
+          filterResults.map((ingredient) => (
+            <IngredientCard
+              key={ingredient._id}
+              ingredient={ingredient}
+              handleClickFlavor={handleClickFlavor}
+            />
+          ))}
       </IngredientList>
     </OverviewContainer>
   );
