@@ -26,9 +26,9 @@ export default function App({ Component, pageProps }) {
       ...arrayWithoutOldObject,
       editedIngredient,
     ];
-    console.log(updatedIngredientsArray);
     setIngredients(updatedIngredientsArray);
   }
+
   return (
     <>
       <SWRConfig value={{ fetcher }}>

@@ -1,4 +1,5 @@
 import { flavors } from "@/lib/ingredients";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { uid } from "uid";
@@ -8,6 +9,7 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  font-size: 15px;
 `;
 const SingleInputSection = styled.div`
   display: flex;
@@ -15,19 +17,13 @@ const SingleInputSection = styled.div`
   gap: 5px;
 `;
 const InputLabel = styled.label``;
-const InputField = styled.input`
-  // width: 100%;
-  // padding: 7px 5px 5px 5px;
-  // margin: 0;
-  // position: absolute;
-  // font-family: var(--general-font);
-`;
+const InputField = styled.input``;
 const LabelAndMessage = styled.div`
   width: 100%;
   display: flex;
   gap: 30px;
 `;
-const NoResultsMessage = styled.p`
+const Message = styled.p`
   color: red;
   margin: 0;
   padding: 0;
@@ -77,10 +73,12 @@ const CancelButton = styled.button``;
 
 export function Form({ ingredient, editIngredients }) {
   const [filteredFlavors, setFilteredFlavors] = useState();
-  const [noResults, setNoResults] = useState(false);
+  const [message, setMessage] = useState(false);
   const [selectedFlavors, setSelectedFlavors] = useState([]);
   const [flavorSearchTerm, setFlavorSearchTerm] = useState();
   const [nameInput, setNameInput] = useState("");
+
+  const router = useRouter();
 
   useEffect(() => {
     if (ingredient) {
@@ -109,7 +107,7 @@ export function Form({ ingredient, editIngredients }) {
     const input = event.target.value;
     setFlavorSearchTerm(input);
     if (!input) {
-      setNoResults(false);
+      setMessage("");
       setFilteredFlavors();
       return;
     }
@@ -119,14 +117,14 @@ export function Form({ ingredient, editIngredients }) {
       flavor.startsWith(lowerCaseInput)
     );
     if (matchingFlavors.length === 0) {
-      setNoResults(true);
+      setMessage("No results");
       return;
     }
     const capitalizedMatchingFlavors = matchingFlavors.map(
       (flavor) => flavor.charAt(0).toUpperCase() + flavor.slice(1)
     );
     setFilteredFlavors(capitalizedMatchingFlavors);
-    setNoResults(false);
+    setMessage("");
   }
 
   function handleClickFlavor(clickedFlavor) {
@@ -136,23 +134,27 @@ export function Form({ ingredient, editIngredients }) {
   }
 
   function removeFlavor(flavorToRemove) {
-    console.log("works");
     const flavors = selectedFlavors;
     const flavorsWithoutDeletedOne = flavors.filter(
       (flavor) => flavor !== flavorToRemove
     );
+    console.log(flavorsWithoutDeletedOne);
     setSelectedFlavors(flavorsWithoutDeletedOne);
   }
 
   function handleSubmit() {
     event.preventDefault();
+    console.log(selectedFlavors);
+    if (selectedFlavors.length === 0) {
+      setMessage("Select at least one flavor");
+      return;
+    }
     const data = new FormData(event.target);
     const userIngredient = Object.fromEntries(data);
     userIngredient.flavorProfile = selectedFlavors[0]; // if only one flavor is selected for now
     userIngredient._id = ingredient._id;
     editIngredients(userIngredient);
-
-    // router.push("/ingredients");
+    router.push("/ingredients");
   }
 
   function cancel() {
@@ -169,12 +171,13 @@ export function Form({ ingredient, editIngredients }) {
           name="name"
           value={ingredient.name}
           onChange={handleNameChange}
+          required
         />
       </SingleInputSection>
       <SingleInputSection>
         <LabelAndMessage>
           <InputLabel htmlFor="input-flavor">Flavor Tag</InputLabel>
-          {noResults && <NoResultsMessage>No Results</NoResultsMessage>}
+          {message && <Message>{message}</Message>}
         </LabelAndMessage>
         <FieldAndDropDown>
           <InputField
@@ -200,7 +203,7 @@ export function Form({ ingredient, editIngredients }) {
             </DropDown>
           )}
         </FieldAndDropDown>
-        {selectedFlavors && (
+        {selectedFlavors.length !== 0 && (
           <SelectedFlavors>
             {selectedFlavors.map((flavor) => (
               <FlavorTag
@@ -225,7 +228,7 @@ export function Form({ ingredient, editIngredients }) {
       </SingleInputSection>
       <SingleInputSection>
         <InputLabel htmlFor="input-url">Image-URL</InputLabel>
-        <InputField type="url" id="input-url" name="url" />
+        <InputField type="url" id="input-url" name="url" required />
       </SingleInputSection>
       <SubmitButton type="submit">Submit</SubmitButton>
       <CancelButton onClick={() => cancel()}>Cancel</CancelButton>
