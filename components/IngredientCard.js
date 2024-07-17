@@ -1,3 +1,4 @@
+import { getFlavorColor } from "@/utils/getFlavorColor";
 import styled from "styled-components";
 
 const CardWrapper = styled.div`
@@ -32,8 +33,7 @@ const EditButton = styled.a`
 `;
 
 export function IngredientCard({ ingredient, handleClickFlavor }) {
-  const flavorLowerCase = ingredient.flavorProfile.toLowerCase();
-  const colorString = `var(--${flavorLowerCase}-color)`;
+  const flavorColor = getFlavorColor(ingredient.flavorProfile);
 
   return (
     <CardWrapper>
@@ -41,7 +41,7 @@ export function IngredientCard({ ingredient, handleClickFlavor }) {
         {ingredient.name}
       </IngredientName>
       <FlavorTag
-        style={{ backgroundColor: colorString }}
+        style={{ backgroundColor: flavorColor }}
         onClick={() => handleClickFlavor(ingredient.flavorProfile)}
       >
         {ingredient.flavorProfile}
