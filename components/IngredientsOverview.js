@@ -92,11 +92,17 @@ const WhiteSpace = styled.div`
   height: 45px;
 `;
 
-export function IngredientsOverview({ ingredients }) {
+export function IngredientsOverview({
+  ingredients,
+  handleClickFlavor,
+  filteredFlavors,
+  setFilteredFlavors,
+  filterResults,
+  setFilterResults,
+  userInput,
+  setUserInput,
+}) {
   const [noResults, setNoResults] = useState(false);
-  const [filteredFlavors, setFilteredFlavors] = useState();
-  const [userInput, setUserInput] = useState();
-  const [filterResults, setFilterResults] = useState();
 
   useEffect(() => {
     if (!ingredients) {
@@ -106,15 +112,6 @@ export function IngredientsOverview({ ingredients }) {
   }, [ingredients]);
 
   if (!ingredients) return <>Loading...</>;
-
-  function handleClickFlavor(clickedFlavor) {
-    setFilteredFlavors("");
-    const ingredientsAfterClick = ingredients.filter(
-      (ingredient) => ingredient.flavorProfile === clickedFlavor
-    );
-    setFilterResults(ingredientsAfterClick);
-    setUserInput("");
-  }
 
   function handleChange() {
     const input = event.target.value;
@@ -174,9 +171,7 @@ export function IngredientsOverview({ ingredients }) {
                   <DropDownItem
                     type="button"
                     key={uid()}
-                    onClick={() => {
-                      handleClickFlavor(flavor);
-                    }}
+                    onClick={handleClickFlavor(flavor)}
                   >
                     {flavor}
                   </DropDownItem>

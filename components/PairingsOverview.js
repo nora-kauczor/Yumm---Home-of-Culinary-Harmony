@@ -11,6 +11,10 @@ const PairingsList = styled.ul`
   gap: 30px;
 `;
 
+const WhiteSpace = styled.div`
+  height: 40px;
+`;
+
 export default function PairingsOverview({ pairings, ingredients }) {
   if (!ingredients || !pairings) return <>Loading...</>;
   return (
@@ -22,6 +26,7 @@ export default function PairingsOverview({ pairings, ingredients }) {
           key={pairing._id}
         ></PairingCard>
       ))}
+      <WhiteSpace />
     </PairingsList>
   );
 }

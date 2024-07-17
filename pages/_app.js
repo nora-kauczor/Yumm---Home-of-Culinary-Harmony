@@ -35,6 +35,18 @@ export default function App({ Component, pageProps }) {
     setIngredients(updatedIngredients);
   }
 
+  const [filteredFlavors, setFilteredFlavors] = useState();
+  const [userInput, setUserInput] = useState();
+  const [filterResults, setFilterResults] = useState();
+  function handleClickFlavor(clickedFlavor) {
+    setFilteredFlavors("");
+    const ingredientsAfterClick = ingredients.filter(
+      (ingredient) => ingredient.flavorProfile === clickedFlavor
+    );
+    setFilterResults(ingredientsAfterClick);
+    setUserInput("");
+  }
+
   return (
     <>
       <SWRConfig value={{ fetcher }}>
@@ -45,6 +57,13 @@ export default function App({ Component, pageProps }) {
             ingredients={ingredients}
             pairings={pairings}
             editIngredients={editIngredients}
+            handleClickFlavor={handleClickFlavor}
+            filteredFlavors={filteredFlavors}
+            setFilteredFlavors={setFilteredFlavors}
+            filterResults={filterResults}
+            setFilterResults={setFilterResults}
+            userInput={userInput}
+            setUserInput={setUserInput}
           />
         </Layout>
       </SWRConfig>

@@ -9,16 +9,19 @@ const CardWrapper = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
+  gap: 20px;
   background-color: var(--card-background-color);
   border-radius: 1rem;
   padding: 20px;
 `;
 
 const IngredientsSection = styled.ul`
+  padding: 7px 0 0 0;
+  margin: 0;
   display: flex;
+  justify-content: space-evenly;
   list-style: none;
-  gap: 20px;
+  gap: 10px;
 `;
 
 const IngredientName = styled.a`
@@ -40,7 +43,8 @@ const FlavorTag = styled.a`
 `;
 
 const ReasonSection = styled.div`
-  display: flex;
+  padding: 0 10px 0 30px;
+  line-height: 1.5;
 `;
 
 export default function PairingCard({ pairing, ingredients }) {
@@ -66,7 +70,7 @@ export default function PairingCard({ pairing, ingredients }) {
         <IngredientName href={`/${specificIngredients[0]._id}`}>
           {specificIngredients[0].name}
         </IngredientName>
-        <line>🧡</line>
+        <IngredientName>&</IngredientName>
         <IngredientName href={`/${specificIngredients[1]._id}`}>
           {specificIngredients[1].name}
         </IngredientName>
