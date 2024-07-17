@@ -187,10 +187,12 @@ export function Form({ ingredient, editIngredients }) {
           type="text"
           id="input-ingredient"
           name="name"
+          maxLength={12}
           value={ingredient.name}
           onChange={handleNameChange}
           required
         />
+        <span id="charCount">0 / 12</span>
       </SingleInputSection>
       <SingleInputSection>
         <LabelAndMessage>
