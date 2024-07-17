@@ -73,16 +73,19 @@ const CancelButton = styled.button``;
 
 export function Form({ ingredient, editIngredients }) {
   const [filteredFlavors, setFilteredFlavors] = useState();
-  const [message, setMessage] = useState(false);
+  const [message, setMessage] = useState("");
+  const [urlMessage, setUrlMessage] = useState(false);
   const [selectedFlavors, setSelectedFlavors] = useState([]);
   const [flavorSearchTerm, setFlavorSearchTerm] = useState();
   const [nameInput, setNameInput] = useState("");
+  const [urlInput, setUrlInput] = useState("");
 
   const router = useRouter();
 
   useEffect(() => {
     if (ingredient) {
       setNameInput(ingredient.name);
+      ingredient.url && setUrlInput(ingredient.url);
     }
   }, [ingredient]);
 
@@ -90,6 +93,12 @@ export function Form({ ingredient, editIngredients }) {
     const newName = event.target.value;
     ingredient.name = newName;
     setNameInput(newName);
+  }
+
+  function handleUrlChange() {
+    const newUrl = event.target.value;
+    ingredient.url = newUrl;
+    setUrlInput(newUrl);
   }
 
   useEffect(() => {
@@ -138,22 +147,32 @@ export function Form({ ingredient, editIngredients }) {
     const flavorsWithoutDeletedOne = flavors.filter(
       (flavor) => flavor !== flavorToRemove
     );
-    console.log(flavorsWithoutDeletedOne);
     setSelectedFlavors(flavorsWithoutDeletedOne);
   }
 
-  function handleSubmit() {
+  function handleSubmit(event) {
     event.preventDefault();
     if (selectedFlavors.length === 0) {
       setMessage("Select at least one flavor");
       return;
     }
-    const data = new FormData(event.target);
-    const userIngredient = Object.fromEntries(data);
-    userIngredient.flavorProfile = selectedFlavors[0]; // if only one flavor is selected for now
-    userIngredient._id = ingredient._id;
-    editIngredients(userIngredient);
-    router.push("/ingredients");
+
+    const newUrl = urlInput;
+    const img = new Image();
+    img.onload = function () {
+      const data = new FormData(event.target);
+      const userIngredient = Object.fromEntries(data);
+      userIngredient.flavorProfile = selectedFlavors[0]; // if only one flavor is selected for now
+      userIngredient._id = ingredient._id;
+      editIngredients(userIngredient);
+      router.push("/ingredients");
+    };
+
+    img.onerror = function () {
+      setUrlMessage(true);
+    };
+
+    img.src = newUrl;
   }
 
   function cancel() {
@@ -226,8 +245,18 @@ export function Form({ ingredient, editIngredients }) {
         )}
       </SingleInputSection>
       <SingleInputSection>
-        <InputLabel htmlFor="input-url">Image-URL</InputLabel>
-        <InputField type="url" id="input-url" name="url" required />
+        <LabelAndMessage>
+          <InputLabel htmlFor="input-url">Image-URL</InputLabel>
+          {urlMessage && <Message>Not an image URL</Message>}
+        </LabelAndMessage>
+        <InputField
+          type="url"
+          id="input-url"
+          name="url"
+          value={ingredient.url}
+          onChange={handleUrlChange}
+          required
+        />
       </SingleInputSection>
       <SubmitButton type="submit">Submit</SubmitButton>
       <CancelButton onClick={() => cancel()}>Cancel</CancelButton>

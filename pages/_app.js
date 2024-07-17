@@ -27,7 +27,6 @@ export default function App({ Component, pageProps }) {
     );
     const updatedIngredients = ingredients;
     updatedIngredients[index] = editedIngredient;
-    console.log(updatedIngredients);
     setIngredients(updatedIngredients);
   }
 
