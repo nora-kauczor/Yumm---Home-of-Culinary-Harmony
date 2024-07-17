@@ -17,6 +17,7 @@ export default createGlobalStyle`
     margin: 0;
     padding: 0;
     font-family: ${epilogue.style.fontFamily};
+--card-background-color: #f5f5f5;
 --navbar-height: 50px;
 --sweet-color: #FFDEE4;   
 --savory-color: #C68958;  

@@ -6,7 +6,7 @@ const CardWrapper = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-  background-color: #f5f5f5;
+  background-color: var(--card-background-color);
   padding: 20px;
   border-radius: 1rem;
 `;

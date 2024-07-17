@@ -10,7 +10,7 @@ const CardWrapper = styled.ul`
   flex-direction: column;
   align-items: center;
   gap: 15px;
-  background-color: beige;
+  background-color: var(--card-background-color);
   border-radius: 1rem;
   padding: 20px;
 `;
