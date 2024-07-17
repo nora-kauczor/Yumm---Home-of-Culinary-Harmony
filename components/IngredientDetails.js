@@ -29,11 +29,22 @@ const FlavorTag = styled.p`
   margin: 0;
 `;
 
-const BackLink = styled.a`
+const ButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+`;
+
+const BackButton = styled.a`
   text-decoration: none;
   color: inherit;
-  // width: 100%;
-  // align-self: left;
+  margin: 0;
+`;
+
+const EditButton = styled.a`
+  text-decoration: none;
+  color: inherit;
+  margin: 0;
 `;
 
 export function IngredientDetails({ ingredient }) {
@@ -55,8 +66,10 @@ export function IngredientDetails({ ingredient }) {
         width={300}
         height={200}
       />
-
-      <BackLink href={"/ingredients"}>Back</BackLink>
+      <ButtonContainer>
+        <BackButton href={"/ingredients"}>Back</BackButton>
+        <EditButton href={`/form/${ingredient._id}`}>Edit</EditButton>
+      </ButtonContainer>
     </DetailsContainer>
   );
 }

@@ -192,7 +192,6 @@ export function Form({ ingredient, editIngredients }) {
           onChange={handleNameChange}
           required
         />
-        <span id="charCount">0 / 12</span>
       </SingleInputSection>
       <SingleInputSection>
         <LabelAndMessage>
