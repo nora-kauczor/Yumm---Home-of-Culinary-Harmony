@@ -21,7 +21,9 @@ const IngredientsSection = styled.ul`
   gap: 20px;
 `;
 
-const IngredientName = styled.li`
+const IngredientName = styled.a`
+  text-decoration: none;
+  color: inherit;
   font-size: 1.25rem;
   padding: 0;
   margin: 0;
@@ -61,9 +63,13 @@ export default function PairingCard({ pairing, ingredients }) {
   return (
     <CardWrapper>
       <IngredientsSection>
-        <IngredientName>{specificIngredients[0].name} </IngredientName>
+        <IngredientName href={`/${specificIngredients[0]._id}`}>
+          {specificIngredients[0].name}
+        </IngredientName>
         <line>🧡</line>
-        <IngredientName>{specificIngredients[1].name}</IngredientName>
+        <IngredientName href={`/${specificIngredients[1]._id}`}>
+          {specificIngredients[1].name}
+        </IngredientName>
       </IngredientsSection>
       <FlavorsSection>
         <FlavorTag style={{ backgroundColor: color0 }}>
