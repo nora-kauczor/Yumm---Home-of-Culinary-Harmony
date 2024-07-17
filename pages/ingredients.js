@@ -1,7 +1,6 @@
 import { IngredientsOverview } from "@/components/IngredientsOverview";
-import { ingredients } from "@/lib/ingredients";
 
-export default function IngredientsPage() {
+export default function IngredientsPage({ ingredients }) {
   return (
     <>
       <IngredientsOverview ingredients={ingredients} />
