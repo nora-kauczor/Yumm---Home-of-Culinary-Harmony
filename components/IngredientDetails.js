@@ -1,5 +1,6 @@
 import Image from "next/image";
 import styled from "styled-components";
+import customImageLoader from "../utils/customImageLoader";
 
 const DetailsContainer = styled.div`
   margin-top: 20px;
@@ -37,7 +38,6 @@ const BackLink = styled.a`
 
 export function IngredientDetails({ ingredient }) {
   if (!ingredient) return <>Loading...</>;
-
   const flavorLowerCase = ingredient.flavorProfile.toLowerCase();
   const colorString = `var(--${flavorLowerCase}-color)`;
   return (
@@ -49,11 +49,13 @@ export function IngredientDetails({ ingredient }) {
         </FlavorTag>
       </NameAndTag>
       <Image
+        loader={customImageLoader}
         src={ingredient.url ? ingredient.url : "/images/spices.jpg"}
-        alt="different grained spices"
+        alt={"TODO"}
         width={300}
         height={200}
       />
+
       <BackLink href={"/ingredients"}>Back</BackLink>
     </DetailsContainer>
   );

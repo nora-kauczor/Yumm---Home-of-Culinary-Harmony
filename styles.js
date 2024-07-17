@@ -30,8 +30,5 @@ export default createGlobalStyle`
 --bitter-color: #9ACD32;  
 --fresh-color: #B0E57C;   
 --tangy-color: #FFB6C1;   
-
   }
-
- 
 `;

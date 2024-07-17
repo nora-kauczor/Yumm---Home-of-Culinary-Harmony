@@ -31,8 +31,6 @@ export default function App({ Component, pageProps }) {
     setIngredients(updatedIngredients);
   }
 
-  console.log("log aus _app.js ", ingredients[0]);
-
   return (
     <>
       <SWRConfig value={{ fetcher }}>
