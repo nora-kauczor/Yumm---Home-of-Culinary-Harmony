@@ -38,6 +38,7 @@ export default function App({ Component, pageProps }) {
   const [filteredFlavors, setFilteredFlavors] = useState();
   const [userInput, setUserInput] = useState();
   const [filterResults, setFilterResults] = useState();
+
   function handleClickFlavor(clickedFlavor) {
     setFilteredFlavors("");
     const ingredientsAfterClick = ingredients.filter(

@@ -1,4 +1,5 @@
 import { getFlavorColor } from "@/utils/getFlavorColor";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 
 const CardWrapper = styled.ul`
@@ -47,7 +48,12 @@ const ReasonSection = styled.div`
   line-height: 1.5;
 `;
 
-export default function PairingCard({ pairing, ingredients }) {
+export default function PairingCard({
+  pairing,
+  ingredients,
+  handleClickFlavor,
+}) {
+  const router = useRouter();
   if (!ingredients || !pairing) return <>Loading...</>;
 
   function findIngredient(id) {
@@ -57,30 +63,45 @@ export default function PairingCard({ pairing, ingredients }) {
     return foundIngredient;
   }
 
-  const specificIngredients = pairing.ingredients.map((id) => {
-    return findIngredient(id);
-  });
+  //   const specificIngredients = pairing.ingredients.map((id) => {
+  //     return findIngredient(id);
+  //   });
 
-  const color0 = getFlavorColor(specificIngredients[0].flavorProfile);
-  const color1 = getFlavorColor(specificIngredients[1].flavorProfile);
+  const ingredient0 = findIngredient(pairing.ingredients[0]);
+  const ingredient1 = findIngredient(pairing.ingredients[1]);
+  const flavor0 = ingredient0.flavorProfile;
+  const flavor1 = ingredient1.flavorProfile;
+  const color0 = getFlavorColor(flavor0);
+  const color1 = getFlavorColor(flavor1);
+
+  //   function goToFilteredFlavors(flavor) {
+  //     handleClickFlavor(flavor);
+  //     router.push("/ingredients");
+  //   }
 
   return (
     <CardWrapper>
       <IngredientsSection>
-        <IngredientName href={`/${specificIngredients[0]._id}`}>
-          {specificIngredients[0].name}
+        <IngredientName href={`/${ingredient0._id}`}>
+          {ingredient0.name}
         </IngredientName>
         <IngredientName>&</IngredientName>
-        <IngredientName href={`/${specificIngredients[1]._id}`}>
-          {specificIngredients[1].name}
+        <IngredientName href={`/${ingredient1._id}`}>
+          {ingredient1.name}
         </IngredientName>
       </IngredientsSection>
       <FlavorsSection>
-        <FlavorTag style={{ backgroundColor: color0 }}>
-          {specificIngredients[0].flavorProfile}{" "}
+        <FlavorTag
+          style={{ backgroundColor: color0 }}
+          onClick={handleClickFlavor(flavor0)}
+        >
+          {flavor0}{" "}
         </FlavorTag>
-        <FlavorTag style={{ backgroundColor: color1 }}>
-          {specificIngredients[1].flavorProfile}{" "}
+        <FlavorTag
+          style={{ backgroundColor: color1 }}
+          //   onClick={goToFilteredFlavors(flavor1)}
+        >
+          {flavor1}{" "}
         </FlavorTag>
       </FlavorsSection>
       <ReasonSection>{pairing.reason}</ReasonSection>

@@ -58,7 +58,7 @@ const DropDownItem = styled.button`
   background-color: white;
 `;
 
-const SelectedFlavors = styled.ul`
+const SelectedFlavor = styled.ul`
   list-style: none;
 `;
 const FlavorTag = styled.li`
@@ -75,7 +75,7 @@ export function Form({ ingredient, editIngredients }) {
   const [filteredFlavors, setFilteredFlavors] = useState();
   const [message, setMessage] = useState("");
   const [urlMessage, setUrlMessage] = useState(false);
-  const [selectedFlavors, setSelectedFlavors] = useState([]);
+  const [selectedFlavor, setSelectedFlavor] = useState([]);
   const [flavorSearchTerm, setFlavorSearchTerm] = useState();
   const [nameInput, setNameInput] = useState("");
   const [urlInput, setUrlInput] = useState("");
@@ -105,7 +105,7 @@ export function Form({ ingredient, editIngredients }) {
     if (!ingredient) {
       return;
     }
-    setSelectedFlavors([ingredient.flavorProfile]);
+    setSelectedFlavor([ingredient.flavorProfile]);
   }, [ingredient]);
 
   if (!ingredient) {
@@ -139,20 +139,16 @@ export function Form({ ingredient, editIngredients }) {
   function handleClickFlavor(clickedFlavor) {
     setFilteredFlavors("");
     setFlavorSearchTerm("");
-    setSelectedFlavors([clickedFlavor, ...selectedFlavors]);
+    setSelectedFlavor([clickedFlavor, ...SelectedFlavor]);
   }
 
-  function removeFlavor(flavorToRemove) {
-    const flavors = selectedFlavors;
-    const flavorsWithoutDeletedOne = flavors.filter(
-      (flavor) => flavor !== flavorToRemove
-    );
-    setSelectedFlavors(flavorsWithoutDeletedOne);
+  function removeFlavor() {
+    setSelectedFlavor("");
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-    if (selectedFlavors.length === 0) {
+    if (SelectedFlavor.length === 0) {
       setMessage("Select at least one flavor");
       return;
     }
@@ -162,7 +158,7 @@ export function Form({ ingredient, editIngredients }) {
     img.onload = function () {
       const data = new FormData(event.target);
       const userIngredient = Object.fromEntries(data);
-      userIngredient.flavorProfile = selectedFlavors[0]; // if only one flavor is selected for now
+      userIngredient.flavorProfile = SelectedFlavor[0];
       userIngredient._id = ingredient._id;
       editIngredients(userIngredient);
       router.push("/ingredients");
@@ -222,27 +218,23 @@ export function Form({ ingredient, editIngredients }) {
             </DropDown>
           )}
         </FieldAndDropDown>
-        {selectedFlavors.length !== 0 && (
-          <SelectedFlavors>
-            {selectedFlavors.map((flavor) => (
-              <FlavorTag
-                key={uid()}
-                style={{
-                  backgroundColor: `var(--${flavor.toLowerCase()}-color)`,
-                }}
-              >
-                {flavor}
-                <DeleteFlavorButton
-                  type="button"
-                  onClick={() => {
-                    removeFlavor(flavor);
-                  }}
-                >
-                  X
-                </DeleteFlavorButton>
-              </FlavorTag>
-            ))}
-          </SelectedFlavors>
+        {selectedFlavor && (
+          <FlavorTag
+            key={uid()}
+            style={{
+              backgroundColor: `var(--${selectedFlavor.toLowerCase()}-color)`,
+            }}
+          >
+            {selectedFlavor}
+            <DeleteFlavorButton
+              type="button"
+              onClick={() => {
+                removeFlavor(flavor);
+              }}
+            >
+              X
+            </DeleteFlavorButton>
+          </FlavorTag>
         )}
       </SingleInputSection>
       <SingleInputSection>

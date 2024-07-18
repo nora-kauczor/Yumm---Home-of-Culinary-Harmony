@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styled from "styled-components";
 import customImageLoader from "../utils/customImageLoader";
+import { getFlavorColor } from "@/utils/getFlavorColor";
 
 const DetailsContainer = styled.div`
   margin-top: 20px;
@@ -29,6 +30,8 @@ const FlavorTag = styled.p`
   margin: 0;
 `;
 
+const Description = styled.p``;
+
 const ButtonContainer = styled.div`
   width: 100%;
   display: flex;
@@ -49,13 +52,13 @@ const EditButton = styled.a`
 
 export function IngredientDetails({ ingredient }) {
   if (!ingredient) return <>Loading...</>;
-  const flavorLowerCase = ingredient.flavorProfile.toLowerCase();
-  const colorString = `var(--${flavorLowerCase}-color)`;
+  const flavorColor = getFlavorColor(ingredient.flavorProfile);
+
   return (
     <DetailsContainer>
       <NameAndTag>
         <Name>{ingredient.name}</Name>
-        <FlavorTag style={{ backgroundColor: colorString }}>
+        <FlavorTag style={{ backgroundColor: flavorColor }}>
           {ingredient.flavorProfile}
         </FlavorTag>
       </NameAndTag>
@@ -66,6 +69,7 @@ export function IngredientDetails({ ingredient }) {
         width={300}
         height={200}
       />
+      <Description>{ingredient.description}</Description>
       <ButtonContainer>
         <BackButton href={"/ingredients"}>Back</BackButton>
         <EditButton href={`/form/${ingredient._id}`}>Edit</EditButton>

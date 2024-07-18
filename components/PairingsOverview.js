@@ -15,7 +15,11 @@ const WhiteSpace = styled.div`
   height: 40px;
 `;
 
-export default function PairingsOverview({ pairings, ingredients }) {
+export default function PairingsOverview({
+  pairings,
+  ingredients,
+  handleClickFlavor,
+}) {
   if (!ingredients || !pairings) return <>Loading...</>;
   return (
     <PairingsList>
@@ -24,6 +28,7 @@ export default function PairingsOverview({ pairings, ingredients }) {
           pairing={pairing}
           ingredients={ingredients}
           key={pairing._id}
+          handleClickFlavor={handleClickFlavor}
         ></PairingCard>
       ))}
       <WhiteSpace />
