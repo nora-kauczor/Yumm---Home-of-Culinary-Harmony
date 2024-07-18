@@ -8,7 +8,7 @@ const OverviewContainer = styled.div`
   width: 80%;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 23px;
 `;
 const FilterSection = styled.div`
   width: 100%;
@@ -49,6 +49,7 @@ const FilterField = styled.input`
   margin: 0;
   position: absolute;
   font-family: var(--general-font);
+  background-color: var(--card-background-color);
 `;
 const DropDown = styled.div`
   width: 100%;
@@ -68,7 +69,7 @@ const DropDownItem = styled.button`
   font-size: 15px;
   border: none;
   padding: 5px;
-  background-color: white;
+  background-color: var(--card-background-color);
 `;
 
 const ResetButton = styled.button`
@@ -156,7 +157,7 @@ export function IngredientsOverview({
   function handleClickDropDown(flavor) {
     setFilteredFlavors("");
     setUserInput("");
-    handleClickFlavor(flavor);
+    // handleClickFlavor(flavor);
   }
 
   return (

@@ -63,7 +63,7 @@ export default function App({ Component, pageProps }) {
             ingredients={ingredients}
             pairings={pairings}
             editIngredients={editIngredients}
-            handleClickFlavor={handleClickFlavor}
+            // handleClickFlavor={handleClickFlavor}
             filterResults={filterResults}
             setFilterResults={setFilterResults}
           />

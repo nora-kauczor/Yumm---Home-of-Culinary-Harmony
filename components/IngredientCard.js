@@ -17,12 +17,14 @@ const IngredientName = styled.a`
   display: flex;
   width: 100%;
   text-decoration: none;
-  color: inherit;
+  color: var(--card-font-color);
+  background-color: var(--card-background-color);
 `;
 
 const FlavorTag = styled.a`
   border-radius: 1rem;
-  padding: 10px;
+  padding: 0px 10px 0px 10px;
+  font-size: 15px;
 `;
 
 const EditButton = styled.a`

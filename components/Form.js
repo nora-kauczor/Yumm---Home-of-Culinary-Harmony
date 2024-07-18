@@ -18,6 +18,7 @@ const SingleInputSection = styled.div`
 `;
 const InputLabel = styled.label``;
 const InputField = styled.input``;
+
 const LabelAndMessage = styled.div`
   width: 100%;
   display: flex;
@@ -56,17 +57,30 @@ const DropDownItem = styled.button`
   border: none;
   padding: 5px;
   background-color: white;
+  width: 100%;
 `;
 
-const FlavorTag = styled.li`
+const FlavorTag = styled.p`
   border-radius: 1rem;
   padding: 10px;
+  width: 50%;
 `;
-const DeleteFlavorButton = styled.button``;
+const DeleteFlavorButton = styled.button`
+  border-style: none;
+  font-weight: 10rem;
+`;
 
-const SubmitButton = styled.button``;
+const ButtonContainer = styled.a`
+  display: flex;
+  justify-content: space-around;
+  font-size: 0.8rem;
+`;
 
-const CancelButton = styled.button``;
+const Button = styled.button`
+  width: 30%;
+  padding: 4px 0 4px 0;
+  font: var(--general-font);
+`;
 
 export function Form({ ingredient, editIngredients }) {
   const [filteredFlavors, setFilteredFlavors] = useState();
@@ -235,10 +249,10 @@ export function Form({ ingredient, editIngredients }) {
           required
         />
       </SingleInputSection>
-      <SubmitButton type="submit">Submit</SubmitButton>
-      <CancelButton onClick={() => router.push("/ingredients")}>
-        Cancel
-      </CancelButton>
+      <ButtonContainer>
+        <Button type="submit">Submit</Button>
+        <Button onClick={() => router.push("/ingredients")}>Cancel</Button>
+      </ButtonContainer>
     </StyledForm>
   );
 }
