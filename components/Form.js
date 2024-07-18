@@ -78,7 +78,7 @@ export function Form({ ingredient, editIngredients }) {
   const [urlInput, setUrlInput] = useState("");
 
   const router = useRouter();
-  console.log(ingredient);
+
   useEffect(() => {
     if (ingredient) {
       setNameInput(ingredient.name);
@@ -157,8 +157,6 @@ export function Form({ ingredient, editIngredients }) {
 
     img.src = newUrl;
   }
-
-  console.log(selectedFlavor);
 
   return (
     <StyledForm onSubmit={handleSubmit}>

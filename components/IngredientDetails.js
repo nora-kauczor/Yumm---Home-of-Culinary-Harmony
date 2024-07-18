@@ -4,7 +4,7 @@ import customImageLoader from "../utils/customImageLoader";
 import { getFlavorColor } from "@/utils/getFlavorColor";
 
 const DetailsContainer = styled.div`
-  margin-top: 20px;
+  margin: 20px 45px 0 45px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,7 +30,9 @@ const FlavorTag = styled.p`
   margin: 0;
 `;
 
-const Description = styled.p``;
+const Description = styled.p`
+  line-height: 1.5;
+`;
 
 const ButtonContainer = styled.div`
   width: 100%;

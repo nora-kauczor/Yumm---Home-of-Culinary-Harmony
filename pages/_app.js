@@ -1,7 +1,7 @@
 import { Layout } from "@/components/Layout";
 import GlobalStyle from "../styles";
 import { SWRConfig } from "swr";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { initialIngredients } from "@/lib/ingredients";
 import useLocalStorageState from "use-local-storage-state";
 import { initialPairings } from "@/lib/pairings";
@@ -30,23 +30,28 @@ export default function App({ Component, pageProps }) {
     const index = ingredients.findIndex(
       (ingredient) => ingredient._id === editedIngredient._id
     );
-    const updatedIngredients = ingredients;
+    const updatedIngredients = [...ingredients];
     updatedIngredients[index] = editedIngredient;
     setIngredients(updatedIngredients);
   }
 
-  const [filteredFlavors, setFilteredFlavors] = useState();
-  const [userInput, setUserInput] = useState();
   const [filterResults, setFilterResults] = useState();
 
-  function handleClickFlavor(clickedFlavor) {
-    setFilteredFlavors("");
+  // function handleClickFlavor(clickedFlavor) {
+  //   const ingredientsAfterClick = ingredients.filter(
+  //     (ingredient) => ingredient.flavorProfile === clickedFlavor
+  //   );
+  //   setFilterResults(ingredientsAfterClick);
+  // }
+
+  //Wir verwenden useCallback, um sicherzustellen, dass editIngredients und handleClickFlavor nur dann neu erstellt werden, wenn sich die Abhängigkeiten ändern. -> aber ist das bei react nicht automatisch so? dass nur neues neu gerendert wird?
+  const handleClickFlavor = useCallback((clickedFlavor) => {
     const ingredientsAfterClick = ingredients.filter(
       (ingredient) => ingredient.flavorProfile === clickedFlavor
     );
     setFilterResults(ingredientsAfterClick);
-    setUserInput("");
-  }
+    console.log("handleClickFlavor was called", Date.now());
+  }, []);
 
   return (
     <>
@@ -59,12 +64,8 @@ export default function App({ Component, pageProps }) {
             pairings={pairings}
             editIngredients={editIngredients}
             handleClickFlavor={handleClickFlavor}
-            filteredFlavors={filteredFlavors}
-            setFilteredFlavors={setFilteredFlavors}
             filterResults={filterResults}
             setFilterResults={setFilterResults}
-            userInput={userInput}
-            setUserInput={setUserInput}
           />
         </Layout>
       </SWRConfig>

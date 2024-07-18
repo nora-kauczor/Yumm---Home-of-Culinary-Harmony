@@ -1,5 +1,6 @@
 import { getFlavorColor } from "@/utils/getFlavorColor";
 import { useRouter } from "next/router";
+import { useCallback } from "react";
 import styled from "styled-components";
 
 const CardWrapper = styled.ul`
@@ -54,6 +55,16 @@ export default function PairingCard({
   handleClickFlavor,
 }) {
   const router = useRouter();
+
+  // const goToFilteredFlavors = useCallback(
+  //   (flavor) => {
+  //     handleClickFlavor(flavor);
+  //     router.push("/ingredients");
+  //     console.log("goToFilteredFlavors was called", Date.now());
+  //   },
+  //   [handleClickFlavor, router]
+  // );
+
   if (!ingredients || !pairing) return <>Loading...</>;
 
   function findIngredient(id) {
@@ -70,11 +81,6 @@ export default function PairingCard({
   const color0 = getFlavorColor(flavor0);
   const color1 = getFlavorColor(flavor1);
 
-  //   function goToFilteredFlavors(flavor) {
-  //     handleClickFlavor(flavor);
-  //     router.push("/ingredients");
-  //   }
-
   return (
     <CardWrapper>
       <IngredientsSection>
@@ -89,13 +95,13 @@ export default function PairingCard({
       <FlavorsSection>
         <FlavorTag
           style={{ backgroundColor: color0 }}
-          onClick={handleClickFlavor(flavor0)}
+          // onClick={() => goToFilteredFlavors(flavor0)}
         >
           {flavor0}{" "}
         </FlavorTag>
         <FlavorTag
           style={{ backgroundColor: color1 }}
-          //   onClick={goToFilteredFlavors(flavor1)}
+          // onClick={() => goToFilteredFlavors(flavor1)}
         >
           {flavor1}{" "}
         </FlavorTag>

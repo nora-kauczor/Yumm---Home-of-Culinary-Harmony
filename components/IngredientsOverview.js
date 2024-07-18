@@ -95,14 +95,12 @@ const WhiteSpace = styled.div`
 export function IngredientsOverview({
   ingredients,
   handleClickFlavor,
-  filteredFlavors,
-  setFilteredFlavors,
   filterResults,
   setFilterResults,
-  userInput,
-  setUserInput,
 }) {
   const [noResults, setNoResults] = useState(false);
+  const [filteredFlavors, setFilteredFlavors] = useState();
+  const [userInput, setUserInput] = useState();
 
   useEffect(() => {
     if (!ingredients) {
@@ -155,6 +153,12 @@ export function IngredientsOverview({
     setUserInput("");
   }
 
+  function handleClickDropDown(flavor) {
+    setFilteredFlavors("");
+    setUserInput("");
+    handleClickFlavor(flavor);
+  }
+
   return (
     <OverviewContainer>
       <FilterSection>
@@ -171,7 +175,7 @@ export function IngredientsOverview({
                   <DropDownItem
                     type="button"
                     key={uid()}
-                    onClick={handleClickFlavor(flavor)}
+                    onClick={() => handleClickDropDown(flavor)}
                   >
                     {flavor}
                   </DropDownItem>
