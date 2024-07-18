@@ -6,8 +6,10 @@ const CardWrapper = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+  align-items: center;
   background-color: var(--card-background-color);
   padding: 20px;
+  gap: 7px;
   border-radius: 1rem;
 `;
 
@@ -23,14 +25,14 @@ const IngredientName = styled.a`
 
 const FlavorTag = styled.a`
   border-radius: 1rem;
-  padding: 0px 10px 0px 10px;
-  font-size: 15px;
+  padding: 10px;
 `;
 
 const EditButton = styled.a`
   border-radius: 1rem;
   padding: 10px;
   text-decoration: none;
+  background-color: lightgrey;
   color: inherit;
 `;
 

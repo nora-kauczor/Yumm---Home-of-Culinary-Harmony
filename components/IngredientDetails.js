@@ -24,7 +24,6 @@ const Name = styled.h1`
 `;
 
 const FlavorTag = styled.p`
-  background-color: orange;
   border-radius: 1rem;
   padding: 10px;
   margin: 0;
@@ -60,7 +59,9 @@ export function IngredientDetails({ ingredient }) {
     <DetailsContainer>
       <NameAndTag>
         <Name>{ingredient.name}</Name>
-        <FlavorTag style={{ backgroundColor: flavorColor }}>
+        <FlavorTag
+        // style={{ backgroundColor: flavorColor }}
+        >
           {ingredient.flavorProfile}
         </FlavorTag>
       </NameAndTag>

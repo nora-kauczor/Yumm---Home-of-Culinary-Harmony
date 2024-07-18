@@ -1,12 +1,12 @@
 import { createGlobalStyle } from "styled-components";
-import { Epilogue, Gabriela } from "next/font/google";
+import { Gabriela, Lato } from "next/font/google";
 
 const gabriela = Gabriela({
   weight: "400",
   subsets: ["latin"],
 });
 
-const epilogue = Epilogue({
+const lato = Lato({
   weight: "400",
   subsets: ["latin"],
 });
@@ -23,9 +23,12 @@ export default createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
-    font-family: ${epilogue.style.fontFamily};
+    font-family: ${lato.style.fontFamily};
+
     --header-font: ${gabriela.style.fontFamily};
---card-background-color: white;
+    
+    --nav-background-color: #444444;
+--card-background-color:#FFFAFA;
 --card-font-color: black;
 --navbar-height: 50px;
 --sweet-color: #FFDEE4;   

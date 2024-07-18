@@ -180,7 +180,7 @@ export function Form({ ingredient, editIngredients }) {
           type="text"
           id="input-ingredient"
           name="name"
-          maxLength={12}
+          maxLength={16}
           value={ingredient.name}
           onChange={handleNameChange}
           required

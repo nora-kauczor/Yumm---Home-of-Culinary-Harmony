@@ -25,7 +25,7 @@ const IngredientsSection = styled.ul`
   list-style: none;
   gap: 10px;
   background-color: var(--card-background-color);
-  color: #ffffff;
+  olor: var(--card-font-color);
 `;
 
 const IngredientName = styled.a`
@@ -38,21 +38,23 @@ const IngredientName = styled.a`
 `;
 
 const FlavorsSection = styled.div`
+  width: 100%;
   display: flex;
+  justify-content: center;
   gap: 15px;
   background-color: var(--card-background-color);
 `;
 
 const FlavorTag = styled.a`
   border-radius: 1rem;
-  padding: 10px;
+  padding: 5px 10px 5px 10px;
 `;
 
 const ReasonSection = styled.div`
   padding: 0 10px 0 30px;
   line-height: 1.5;
   background-color: var(--card-background-color);
-  color: #ffffff;
+  color: var(--card-font-color);
 `;
 
 export default function PairingCard({
