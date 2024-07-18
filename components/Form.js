@@ -58,9 +58,6 @@ const DropDownItem = styled.button`
   background-color: white;
 `;
 
-const SelectedFlavor = styled.ul`
-  list-style: none;
-`;
 const FlavorTag = styled.li`
   border-radius: 1rem;
   padding: 10px;
@@ -75,19 +72,24 @@ export function Form({ ingredient, editIngredients }) {
   const [filteredFlavors, setFilteredFlavors] = useState();
   const [message, setMessage] = useState("");
   const [urlMessage, setUrlMessage] = useState(false);
-  const [selectedFlavor, setSelectedFlavor] = useState([]);
+  const [selectedFlavor, setSelectedFlavor] = useState("");
   const [flavorSearchTerm, setFlavorSearchTerm] = useState();
   const [nameInput, setNameInput] = useState("");
   const [urlInput, setUrlInput] = useState("");
 
   const router = useRouter();
-
+  console.log(ingredient);
   useEffect(() => {
     if (ingredient) {
       setNameInput(ingredient.name);
       ingredient.url && setUrlInput(ingredient.url);
+      setSelectedFlavor(ingredient.flavorProfile);
     }
   }, [ingredient]);
+
+  if (!ingredient) {
+    return <div>Loading...</div>;
+  }
 
   function handleNameChange() {
     const newName = event.target.value;
@@ -99,17 +101,6 @@ export function Form({ ingredient, editIngredients }) {
     const newUrl = event.target.value;
     ingredient.url = newUrl;
     setUrlInput(newUrl);
-  }
-
-  useEffect(() => {
-    if (!ingredient) {
-      return;
-    }
-    setSelectedFlavor([ingredient.flavorProfile]);
-  }, [ingredient]);
-
-  if (!ingredient) {
-    return <div>Loading...</div>;
   }
 
   function handleFlavorChange(event) {
@@ -139,11 +130,7 @@ export function Form({ ingredient, editIngredients }) {
   function handleClickFlavor(clickedFlavor) {
     setFilteredFlavors("");
     setFlavorSearchTerm("");
-    setSelectedFlavor([clickedFlavor, ...SelectedFlavor]);
-  }
-
-  function removeFlavor() {
-    setSelectedFlavor("");
+    setSelectedFlavor(clickedFlavor);
   }
 
   function handleSubmit(event) {
@@ -158,7 +145,7 @@ export function Form({ ingredient, editIngredients }) {
     img.onload = function () {
       const data = new FormData(event.target);
       const userIngredient = Object.fromEntries(data);
-      userIngredient.flavorProfile = SelectedFlavor[0];
+      userIngredient.flavorProfile = SelectedFlavor;
       userIngredient._id = ingredient._id;
       editIngredients(userIngredient);
       router.push("/ingredients");
@@ -171,9 +158,7 @@ export function Form({ ingredient, editIngredients }) {
     img.src = newUrl;
   }
 
-  function cancel() {
-    router.push("/ingredients");
-  }
+  console.log(selectedFlavor);
 
   return (
     <StyledForm onSubmit={handleSubmit}>
@@ -218,25 +203,26 @@ export function Form({ ingredient, editIngredients }) {
             </DropDown>
           )}
         </FieldAndDropDown>
-        {selectedFlavor && (
-          <FlavorTag
-            key={uid()}
-            style={{
-              backgroundColor: `var(--${selectedFlavor.toLowerCase()}-color)`,
+      </SingleInputSection>
+      {selectedFlavor && (
+        <FlavorTag
+          key={uid()}
+          style={{
+            backgroundColor: `var(--${selectedFlavor.toLowerCase()}-color)`,
+          }}
+        >
+          {selectedFlavor}
+          <DeleteFlavorButton
+            type="button"
+            onClick={() => {
+              () => setSelectedFlavor("");
             }}
           >
-            {selectedFlavor}
-            <DeleteFlavorButton
-              type="button"
-              onClick={() => {
-                removeFlavor(flavor);
-              }}
-            >
-              X
-            </DeleteFlavorButton>
-          </FlavorTag>
-        )}
-      </SingleInputSection>
+            X
+          </DeleteFlavorButton>
+        </FlavorTag>
+      )}
+
       <SingleInputSection>
         <LabelAndMessage>
           <InputLabel htmlFor="input-url">Image-URL</InputLabel>
@@ -252,7 +238,9 @@ export function Form({ ingredient, editIngredients }) {
         />
       </SingleInputSection>
       <SubmitButton type="submit">Submit</SubmitButton>
-      <CancelButton onClick={() => cancel()}>Cancel</CancelButton>
+      <CancelButton onClick={() => router.push("/ingredients")}>
+        Cancel
+      </CancelButton>
     </StyledForm>
   );
 }

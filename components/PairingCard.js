@@ -63,10 +63,6 @@ export default function PairingCard({
     return foundIngredient;
   }
 
-  //   const specificIngredients = pairing.ingredients.map((id) => {
-  //     return findIngredient(id);
-  //   });
-
   const ingredient0 = findIngredient(pairing.ingredients[0]);
   const ingredient1 = findIngredient(pairing.ingredients[1]);
   const flavor0 = ingredient0.flavorProfile;
