@@ -127,29 +127,25 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
     } else {
       setUserInputs([otherInput, newInput]);
     }
-    console.log(userInputs); // TODO userInputs wird immer erst einen klick spater aktualisert.....
-
     if (!newInput) {
       source === "input0" ? setFilteredFlavors0("") : setFilteredFlavors1("");
       return;
     }
-
     const lowerCaseInput = newInput.toLowerCase();
     const lowerCaseFlavors = flavors.map((flavor) => flavor.toLowerCase());
     const matchingFlavors = lowerCaseFlavors.filter((flavor) =>
       flavor.startsWith(lowerCaseInput)
     );
-
     if (matchingFlavors.length === 0) {
-      // setNoResults(true);
-      // setFilteredPairings(pairings);
-      "input0" ? setFilteredFlavors0("") : setFilteredFlavors1("");
+      source === "input0" ? setFilteredFlavors0("") : setFilteredFlavors1("");
       return;
     }
-
     const capitalizedMatchingFlavors = matchingFlavors.map(
       (flavor) => flavor.charAt(0).toUpperCase() + flavor.slice(1)
     );
+    source === "input0"
+      ? setFilteredFlavors0(capitalizedMatchingFlavors)
+      : setFilteredFlavors1(capitalizedMatchingFlavors);
   }
 
   function findIngredientById(id) {
@@ -175,11 +171,11 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
     return matchingFlavor;
   }
 
-  function filterPairings(input0, input1) {
+  function filterPairings(flavor0, flavor1) {
     // if there is an input0
     if (flavor0) {
       const matchingPairings0 = pairings.filter((pairing) =>
-        findMatchingFlavor(pairing, input0)
+        findMatchingFlavor(pairing, flavor0)
       );
       // if theres input0 but no input1
       if (!flavor1) {
@@ -190,7 +186,7 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
       }
       // if there is input0 and input1
       const doubleInputMatches = matchingPairings0.filter((pairings) =>
-        findMatchingFlavor(pairing, input1)
+        findMatchingFlavor(pairing, flavor1)
       );
       if (doubleInputMatches.length !== 0) {
         setFilteredPairings(doubleInputMatches);
@@ -201,7 +197,7 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
     } else {
       // if there is no input0
       const matchingPairings1 = pairings.filter((pairing) =>
-        findMatchingFlavor(pairing, input0)
+        findMatchingFlavor(pairing, flavor0)
       );
 
       if (matchingPairings1.length !== 0) {
