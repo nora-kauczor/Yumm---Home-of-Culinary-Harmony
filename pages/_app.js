@@ -44,16 +44,10 @@ export default function App({ Component, pageProps }) {
   }, [ingredients]);
 
   function filterIngredients(clickedFlavor) {
-    console.log("filterIngredients was called", Date.now());
     const ingredientsAfterClick = ingredients.filter(
       (ingredient) => ingredient.flavorProfile === clickedFlavor
     );
     setFilterResults(ingredientsAfterClick);
-    console.log(
-      filterResults,
-      Date.now(),
-      "inside filterIngredients, after calling setter"
-    );
   }
 
   return (

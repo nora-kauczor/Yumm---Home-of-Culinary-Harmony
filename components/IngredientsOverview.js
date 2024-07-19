@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { IngredientCard } from "./IngredientCard";
 import { flavors } from "@/lib/ingredients";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { uid } from "uid";
 
 const OverviewContainer = styled.div`
@@ -157,7 +157,7 @@ export function IngredientsOverview({
     <OverviewContainer>
       <FilterSection>
         <LabelAndMessage>
-          <FilterLabel>Search flavor tags</FilterLabel>
+          <FilterLabel>Search by flavors</FilterLabel>
           {noResults && <NoResultsMessage>No Results</NoResultsMessage>}
         </LabelAndMessage>
         <FieldDropDownAndButtonWrapper>
