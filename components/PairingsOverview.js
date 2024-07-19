@@ -3,6 +3,8 @@ import PairingCard from "./PairingCard";
 import { useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
 import { initialPairings } from "@/lib/pairings";
+import { flavors } from "@/lib/ingredients";
+import { uid } from "uid";
 
 const PairingsList = styled.ul`
   list-style: none;
@@ -107,58 +109,133 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
   const [pairings, setPairings] = useLocalStorageState("pairings", {
     defaultValue: initialPairings,
   });
-  const [noResults, setNoResults] = useState(false);
-  const [filteredFlavors, setFilteredFlavors] = useState();
-  const [userInput, setUserInput] = useState();
+
+  const [filteredFlavors0, setFilteredFlavors0] = useState();
+  const [filteredFlavors1, setFilteredFlavors1] = useState();
+  const [userInputs, setUserInputs] = useState([]);
+  const [filteredPairings, setFilteredPairings] = useState();
   if (!ingredients || !pairings) return <>Loading...</>;
 
   function handleChange() {
-    const input = event.target.value;
-    setUserInput(input);
-    // if input field is empty, set back filtered flavors (drop down options) and message and return
-    if (!input) {
-      setNoResults(false);
-      setFilteredFlavors();
+    const source = event.target.name;
+    const newInput = event.target.value;
+    const currentUserInputs = [...userInputs];
+    const otherInput =
+      source === "input0" ? currentUserInputs[1] : currentUserInputs[0];
+    if (source === "input0") {
+      setUserInputs([newInput, otherInput]);
+    } else {
+      setUserInputs([otherInput, newInput]);
+    }
+    console.log(userInputs); // TODO userInputs wird immer erst einen klick spater aktualisert.....
+
+    if (!newInput) {
+      source === "input0" ? setFilteredFlavors0("") : setFilteredFlavors1("");
       return;
     }
-    // else, find matching flavors
-    const lowerCaseInput = input.toLowerCase();
+
+    const lowerCaseInput = newInput.toLowerCase();
     const lowerCaseFlavors = flavors.map((flavor) => flavor.toLowerCase());
     const matchingFlavors = lowerCaseFlavors.filter((flavor) =>
       flavor.startsWith(lowerCaseInput)
     );
-    // if there's no matching flavors, set back filtered flavors (drop down options) and display error message and return
+
     if (matchingFlavors.length === 0) {
-      setNoResults(true);
-      setFilterResults(ingredients);
-      setFilteredFlavors();
+      // setNoResults(true);
+      // setFilteredPairings(pairings);
+      "input0" ? setFilteredFlavors0("") : setFilteredFlavors1("");
       return;
     }
-    // else, set matching flavors (have them displayed in drop down)
+
     const capitalizedMatchingFlavors = matchingFlavors.map(
       (flavor) => flavor.charAt(0).toUpperCase() + flavor.slice(1)
     );
-    setFilteredFlavors(capitalizedMatchingFlavors);
-    // find matching ingredients and store them in filter Results state variable (ingredient cards which are being diplayed), set back message
-    const matchingIngredients = ingredients.filter((ingredient) =>
-      capitalizedMatchingFlavors.includes(ingredient.flavorProfile)
-    );
-    setFilterResults(matchingIngredients);
-    setNoResults(false);
   }
+
+  function findIngredientById(id) {
+    const foundIngredient = ingredients.find(
+      (ingredient) => ingredient._id === id
+    );
+    return foundIngredient;
+  }
+
+  function turnIdArrayIntoFlavorArray(IdArray) {
+    const ingredient0 = findIngredientById(IdArray[0]);
+    const ingredient1 = findIngredientById(IdArray[1]);
+    const flavor0 = ingredient0.flavorProfile;
+    const flavor1 = ingredient1.flavorProfile;
+    return [flavor0, flavor1];
+  }
+
+  function findMatchingFlavor(pairing, searchedFlavor) {
+    const pairingFlavors = turnIdArrayIntoFlavorArray(pairing.ingredients);
+    const matchingFlavor = pairingFlavors.find(
+      (flavor) => flavor === searchedFlavor
+    );
+    return matchingFlavor;
+  }
+
+  function filterPairings(input0, input1) {
+    // if there is an input0
+    if (flavor0) {
+      const matchingPairings0 = pairings.filter((pairing) =>
+        findMatchingFlavor(pairing, input0)
+      );
+      // if theres input0 but no input1
+      if (!flavor1) {
+        if (matchingPairings0.length !== 0) {
+          setFilteredPairings(matchingPairings0);
+        }
+        return;
+      }
+      // if there is input0 and input1
+      const doubleInputMatches = matchingPairings0.filter((pairings) =>
+        findMatchingFlavor(pairing, input1)
+      );
+      if (doubleInputMatches.length !== 0) {
+        setFilteredPairings(doubleInputMatches);
+      } else {
+        setFilteredPairings(matchingPairings0);
+      }
+      return;
+    } else {
+      // if there is no input0
+      const matchingPairings1 = pairings.filter((pairing) =>
+        findMatchingFlavor(pairing, input0)
+      );
+
+      if (matchingPairings1.length !== 0) {
+        setFilteredPairings(matchingPairings1);
+      }
+      return;
+    }
+  }
+
+  //
+  //   // if there's no matching flavors, set back filtered flavors (drop down options) and display error message and return
+  //
+  //   // else, set matching flavors (have them displayed in drop down)
+  //
+  //   // find matching ingredients and store them in filter Results state variable (ingredient cards which are being diplayed), set back message
+  //   const matchingPairings = ingredients.filter((ingredient) =>
+  //     capitalizedMatchingFlavors.includes(ingredient.flavorProfile)
+  //   );
+  //   setFilterResults(matchingIngredients);
+  //   setNoResults(false);
+  // }
 
   function handleClickReset() {
     setFilteredFlavors();
-    setFilterResults(ingredients);
+    setFilteredPairings(pairings);
     setNoResults(false);
-    setUserInput("");
+    setUserInputs("");
   }
 
-  function handleClickDropDown(flavor) {
-    setFilteredFlavors("");
-    setUserInput("");
-    filterIngredients(flavor);
-  }
+  // function handleClickDropDown(flavor) {
+  //   setFilteredFlavors("");
+  //   setUserInputs("");
+  //   filterIngredients(flavor);
+  // }
 
   return (
     <OverviewContainer>
@@ -167,18 +244,18 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
           <FilterLabel>
             Search by single flavor or flavor combination
           </FilterLabel>
-          {noResults && <NoResultsMessage>No Results</NoResultsMessage>}
+          {/* {noResults && <NoResultsMessage>No Results</NoResultsMessage>} */}
         </LabelAndMessage>
         <FieldDropDownAndButtonWrapper>
           <FieldAndDropDown>
             <FilterField
-              name="first-input"
-              value={userInput}
+              name="input0"
+              value={userInputs[0]}
               onChange={handleChange}
             />
-            {filteredFlavors && (
+            {filteredFlavors0 && (
               <DropDown>
-                {filteredFlavors.map((flavor) => (
+                {filteredFlavors0.map((flavor) => (
                   <DropDownItem
                     type="button"
                     key={uid()}
@@ -192,13 +269,13 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
           </FieldAndDropDown>
           <FieldAndDropDown>
             <FilterField
-              name="second-input"
-              value={userInput}
+              name="input1"
+              value={userInputs[1]}
               onChange={handleChange}
             />
-            {filteredFlavors && (
+            {filteredFlavors1 && (
               <DropDown>
-                {filteredFlavors.map((flavor) => (
+                {filteredFlavors1.map((flavor) => (
                   <DropDownItem
                     type="button"
                     key={uid()}
@@ -222,10 +299,10 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
             ingredients={ingredients}
             key={pairing._id}
             filterIngredients={filterIngredients}
-          ></PairingCard>
+          />
         ))}
-        <WhiteSpace />
       </PairingsList>
+      <WhiteSpace />
     </OverviewContainer>
   );
 }

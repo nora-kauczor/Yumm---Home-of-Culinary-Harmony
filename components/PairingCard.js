@@ -80,15 +80,15 @@ export default function PairingCard({
     router.push("/ingredients");
   }
 
-  function findIngredient(id) {
+  function findIngredientById(id) {
     const foundIngredient = ingredients.find(
       (ingredient) => ingredient._id === id
     );
     return foundIngredient;
   }
 
-  const ingredient0 = findIngredient(pairing.ingredients[0]);
-  const ingredient1 = findIngredient(pairing.ingredients[1]);
+  const ingredient0 = findIngredientById(pairing.ingredients[0]);
+  const ingredient1 = findIngredientById(pairing.ingredients[1]);
   const flavor0 = ingredient0.flavorProfile;
   const flavor1 = ingredient1.flavorProfile;
   const color0 = getFlavorColor(flavor0);
