@@ -64,14 +64,6 @@ export default function PairingCard({
 }) {
   const router = useRouter();
 
-  // const goToFilteredFlavors = useCallback(
-  //   (flavor) => {
-  //     filterIngredients(flavor);
-  //     router.push("/ingredients");
-  //     console.log("goToFilteredFlavors was called", Date.now());
-  //   },
-  //   [filterIngredients, router]
-  // );
   if (!ingredients || !pairing) return <>Loading...</>;
 
   function goToFilteredIngredients(flavor) {
