@@ -1,7 +1,7 @@
 import { Layout } from "@/components/Layout";
 import GlobalStyle from "../styles";
 import { SWRConfig } from "swr";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { initialIngredients } from "@/lib/ingredients";
 import useLocalStorageState from "use-local-storage-state";
 import { initialPairings } from "@/lib/pairings";
@@ -36,22 +36,25 @@ export default function App({ Component, pageProps }) {
   }
 
   const [filterResults, setFilterResults] = useState();
+  useEffect(() => {
+    if (!ingredients) {
+      return;
+    }
+    setFilterResults(ingredients);
+  }, [ingredients]);
 
-  // function handleClickFlavor(clickedFlavor) {
-  //   const ingredientsAfterClick = ingredients.filter(
-  //     (ingredient) => ingredient.flavorProfile === clickedFlavor
-  //   );
-  //   setFilterResults(ingredientsAfterClick);
-  // }
-
-  //Wir verwenden useCallback, um sicherzustellen, dass editIngredients und handleClickFlavor nur dann neu erstellt werden, wenn sich die Abhängigkeiten ändern. -> aber ist das bei react nicht automatisch so? dass nur neues neu gerendert wird?
-  const handleClickFlavor = useCallback((clickedFlavor) => {
+  function filterIngredients(clickedFlavor) {
+    console.log("filterIngredients was called", Date.now());
     const ingredientsAfterClick = ingredients.filter(
       (ingredient) => ingredient.flavorProfile === clickedFlavor
     );
     setFilterResults(ingredientsAfterClick);
-    console.log("handleClickFlavor was called", Date.now());
-  }, []);
+    console.log(
+      filterResults,
+      Date.now(),
+      "inside filterIngredients, after calling setter"
+    );
+  }
 
   return (
     <>
@@ -63,7 +66,7 @@ export default function App({ Component, pageProps }) {
             ingredients={ingredients}
             pairings={pairings}
             editIngredients={editIngredients}
-            // handleClickFlavor={handleClickFlavor}
+            filterIngredients={filterIngredients}
             filterResults={filterResults}
             setFilterResults={setFilterResults}
           />

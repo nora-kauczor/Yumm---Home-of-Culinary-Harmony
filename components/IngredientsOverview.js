@@ -95,7 +95,7 @@ const WhiteSpace = styled.div`
 
 export function IngredientsOverview({
   ingredients,
-  handleClickFlavor,
+  filterIngredients,
   filterResults,
   setFilterResults,
 }) {
@@ -103,14 +103,7 @@ export function IngredientsOverview({
   const [filteredFlavors, setFilteredFlavors] = useState();
   const [userInput, setUserInput] = useState();
 
-  useEffect(() => {
-    if (!ingredients) {
-      return;
-    }
-    setFilterResults(ingredients);
-  }, [ingredients]);
-
-  if (!ingredients) return <>Loading...</>;
+  if (!ingredients || !filterResults) return <>Loading...</>;
 
   function handleChange() {
     const input = event.target.value;
@@ -157,7 +150,7 @@ export function IngredientsOverview({
   function handleClickDropDown(flavor) {
     setFilteredFlavors("");
     setUserInput("");
-    // handleClickFlavor(flavor);
+    filterIngredients(flavor);
   }
 
   return (
@@ -195,7 +188,7 @@ export function IngredientsOverview({
             <IngredientCard
               key={ingredient._id}
               ingredient={ingredient}
-              handleClickFlavor={handleClickFlavor}
+              filterIngredients={filterIngredients}
             />
           ))}
       </IngredientList>

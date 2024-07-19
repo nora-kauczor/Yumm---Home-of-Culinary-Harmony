@@ -60,18 +60,24 @@ const ReasonSection = styled.div`
 export default function PairingCard({
   pairing,
   ingredients,
-  handleClickFlavor,
+  filterIngredients,
 }) {
   const router = useRouter();
 
   // const goToFilteredFlavors = useCallback(
   //   (flavor) => {
-  //     handleClickFlavor(flavor);
+  //     filterIngredients(flavor);
   //     router.push("/ingredients");
   //     console.log("goToFilteredFlavors was called", Date.now());
   //   },
-  //   [handleClickFlavor, router]
+  //   [filterIngredients, router]
   // );
+
+  function goToFilteredFlavors(flavor) {
+    console.log("goToFilteredFlavors was called", Date.now());
+    filterIngredients(flavor);
+    router.push("/ingredients");
+  }
 
   if (!ingredients || !pairing) return <>Loading...</>;
 
@@ -103,13 +109,13 @@ export default function PairingCard({
       <FlavorsSection>
         <FlavorTag
           style={{ backgroundColor: color0 }}
-          // onClick={() => goToFilteredFlavors(flavor0)}
+          onClick={() => goToFilteredFlavors(flavor0)}
         >
           {flavor0}{" "}
         </FlavorTag>
         <FlavorTag
           style={{ backgroundColor: color1 }}
-          // onClick={() => goToFilteredFlavors(flavor1)}
+          onClick={() => goToFilteredFlavors(flavor1)}
         >
           {flavor1}{" "}
         </FlavorTag>

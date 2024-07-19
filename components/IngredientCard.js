@@ -36,7 +36,7 @@ const EditButton = styled.a`
   color: inherit;
 `;
 
-export function IngredientCard({ ingredient, handleClickFlavor }) {
+export function IngredientCard({ ingredient, filterIngredients }) {
   const flavorColor = getFlavorColor(ingredient.flavorProfile);
 
   return (
@@ -46,7 +46,7 @@ export function IngredientCard({ ingredient, handleClickFlavor }) {
       </IngredientName>
       <FlavorTag
         style={{ backgroundColor: flavorColor }}
-        onClick={() => handleClickFlavor(ingredient.flavorProfile)}
+        onClick={() => filterIngredients(ingredient.flavorProfile)}
       >
         {ingredient.flavorProfile}
       </FlavorTag>

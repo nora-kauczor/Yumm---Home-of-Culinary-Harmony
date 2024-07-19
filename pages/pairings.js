@@ -3,13 +3,13 @@ import PairingsOverview from "@/components/PairingsOverview";
 export default function PairingsPage({
   pairings,
   ingredients,
-  // handleClickFlavor,
+  handleClickFlavor,
 }) {
   return (
     <PairingsOverview
       pairings={pairings}
       ingredients={ingredients}
-      // handleClickFlavor={handleClickFlavor}
+      handleClickFlavor={handleClickFlavor}
     />
   );
 }
