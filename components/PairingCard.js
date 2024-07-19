@@ -1,4 +1,6 @@
 import { getFlavorColor } from "@/utils/getFlavorColor";
+import { useRouter } from "next/router";
+import { useCallback } from "react";
 import styled from "styled-components";
 
 const CardWrapper = styled.ul`
@@ -9,16 +11,21 @@ const CardWrapper = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
-  background-color: beige;
+  gap: 20px;
+  background-color: var(--card-background-color);
   border-radius: 1rem;
   padding: 20px;
 `;
 
 const IngredientsSection = styled.ul`
+  padding: 7px 0 0 0;
+  margin: 0;
   display: flex;
+  justify-content: space-evenly;
   list-style: none;
-  gap: 20px;
+  gap: 10px;
+  background-color: var(--card-background-color);
+  olor: var(--card-font-color);
 `;
 
 const IngredientName = styled.a`
@@ -27,23 +34,51 @@ const IngredientName = styled.a`
   font-size: 1.25rem;
   padding: 0;
   margin: 0;
+  background-color: var(--card-background-color);
 `;
 
 const FlavorsSection = styled.div`
+  width: 100%;
   display: flex;
+  justify-content: center;
   gap: 15px;
+  background-color: var(--card-background-color);
 `;
 
 const FlavorTag = styled.a`
   border-radius: 1rem;
-  padding: 10px;
+  padding: 5px 10px 5px 10px;
 `;
 
 const ReasonSection = styled.div`
-  display: flex;
+  padding: 0 10px 0 30px;
+  line-height: 1.5;
+  background-color: var(--card-background-color);
+  color: var(--card-font-color);
 `;
 
-export default function PairingCard({ pairing, ingredients }) {
+export default function PairingCard({
+  pairing,
+  ingredients,
+  filterIngredients,
+}) {
+  const router = useRouter();
+
+  // const goToFilteredFlavors = useCallback(
+  //   (flavor) => {
+  //     filterIngredients(flavor);
+  //     router.push("/ingredients");
+  //     console.log("goToFilteredFlavors was called", Date.now());
+  //   },
+  //   [filterIngredients, router]
+  // );
+
+  function goToFilteredFlavors(flavor) {
+    console.log("goToFilteredFlavors was called", Date.now());
+    filterIngredients(flavor);
+    router.push("/ingredients");
+  }
+
   if (!ingredients || !pairing) return <>Loading...</>;
 
   function findIngredient(id) {
@@ -53,30 +88,36 @@ export default function PairingCard({ pairing, ingredients }) {
     return foundIngredient;
   }
 
-  const specificIngredients = pairing.ingredients.map((id) => {
-    return findIngredient(id);
-  });
-
-  const color0 = getFlavorColor(specificIngredients[0].flavorProfile);
-  const color1 = getFlavorColor(specificIngredients[1].flavorProfile);
+  const ingredient0 = findIngredient(pairing.ingredients[0]);
+  const ingredient1 = findIngredient(pairing.ingredients[1]);
+  const flavor0 = ingredient0.flavorProfile;
+  const flavor1 = ingredient1.flavorProfile;
+  const color0 = getFlavorColor(flavor0);
+  const color1 = getFlavorColor(flavor1);
 
   return (
     <CardWrapper>
       <IngredientsSection>
-        <IngredientName href={`/${specificIngredients[0]._id}`}>
-          {specificIngredients[0].name}
+        <IngredientName href={`/${ingredient0._id}`}>
+          {ingredient0.name}
         </IngredientName>
-        <line>🧡</line>
-        <IngredientName href={`/${specificIngredients[1]._id}`}>
-          {specificIngredients[1].name}
+        <IngredientName>&</IngredientName>
+        <IngredientName href={`/${ingredient1._id}`}>
+          {ingredient1.name}
         </IngredientName>
       </IngredientsSection>
       <FlavorsSection>
-        <FlavorTag style={{ backgroundColor: color0 }}>
-          {specificIngredients[0].flavorProfile}{" "}
+        <FlavorTag
+          style={{ backgroundColor: color0 }}
+          onClick={() => goToFilteredFlavors(flavor0)}
+        >
+          {flavor0}{" "}
         </FlavorTag>
-        <FlavorTag style={{ backgroundColor: color1 }}>
-          {specificIngredients[1].flavorProfile}{" "}
+        <FlavorTag
+          style={{ backgroundColor: color1 }}
+          onClick={() => goToFilteredFlavors(flavor1)}
+        >
+          {flavor1}{" "}
         </FlavorTag>
       </FlavorsSection>
       <ReasonSection>{pairing.reason}</ReasonSection>

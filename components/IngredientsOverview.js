@@ -8,7 +8,7 @@ const OverviewContainer = styled.div`
   width: 80%;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 23px;
 `;
 const FilterSection = styled.div`
   width: 100%;
@@ -49,6 +49,7 @@ const FilterField = styled.input`
   margin: 0;
   position: absolute;
   font-family: var(--general-font);
+  background-color: var(--card-background-color);
 `;
 const DropDown = styled.div`
   width: 100%;
@@ -68,7 +69,7 @@ const DropDownItem = styled.button`
   font-size: 15px;
   border: none;
   padding: 5px;
-  background-color: white;
+  background-color: var(--card-background-color);
 `;
 
 const ResetButton = styled.button`
@@ -92,29 +93,17 @@ const WhiteSpace = styled.div`
   height: 45px;
 `;
 
-export function IngredientsOverview({ ingredients }) {
+export function IngredientsOverview({
+  ingredients,
+  filterIngredients,
+  filterResults,
+  setFilterResults,
+}) {
   const [noResults, setNoResults] = useState(false);
   const [filteredFlavors, setFilteredFlavors] = useState();
   const [userInput, setUserInput] = useState();
-  const [filterResults, setFilterResults] = useState();
 
-  useEffect(() => {
-    if (!ingredients) {
-      return;
-    }
-    setFilterResults(ingredients);
-  }, [ingredients]);
-
-  if (!ingredients) return <>Loading...</>;
-
-  function handleClickFlavor(clickedFlavor) {
-    setFilteredFlavors("");
-    const ingredientsAfterClick = ingredients.filter(
-      (ingredient) => ingredient.flavorProfile === clickedFlavor
-    );
-    setFilterResults(ingredientsAfterClick);
-    setUserInput("");
-  }
+  if (!ingredients || !filterResults) return <>Loading...</>;
 
   function handleChange() {
     const input = event.target.value;
@@ -158,6 +147,12 @@ export function IngredientsOverview({ ingredients }) {
     setUserInput("");
   }
 
+  function handleClickDropDown(flavor) {
+    setFilteredFlavors("");
+    setUserInput("");
+    filterIngredients(flavor);
+  }
+
   return (
     <OverviewContainer>
       <FilterSection>
@@ -174,9 +169,7 @@ export function IngredientsOverview({ ingredients }) {
                   <DropDownItem
                     type="button"
                     key={uid()}
-                    onClick={() => {
-                      handleClickFlavor(flavor);
-                    }}
+                    onClick={() => handleClickDropDown(flavor)}
                   >
                     {flavor}
                   </DropDownItem>
@@ -195,7 +188,7 @@ export function IngredientsOverview({ ingredients }) {
             <IngredientCard
               key={ingredient._id}
               ingredient={ingredient}
-              handleClickFlavor={handleClickFlavor}
+              filterIngredients={filterIngredients}
             />
           ))}
       </IngredientList>

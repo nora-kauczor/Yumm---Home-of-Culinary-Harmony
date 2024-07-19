@@ -18,6 +18,7 @@ const SingleInputSection = styled.div`
 `;
 const InputLabel = styled.label``;
 const InputField = styled.input``;
+
 const LabelAndMessage = styled.div`
   width: 100%;
   display: flex;
@@ -56,26 +57,36 @@ const DropDownItem = styled.button`
   border: none;
   padding: 5px;
   background-color: white;
+  width: 100%;
 `;
 
-const SelectedFlavors = styled.ul`
-  list-style: none;
-`;
-const FlavorTag = styled.li`
+const FlavorTag = styled.p`
   border-radius: 1rem;
   padding: 10px;
+  width: 50%;
 `;
-const DeleteFlavorButton = styled.button``;
+const DeleteFlavorButton = styled.button`
+  border-style: none;
+  font-weight: 10rem;
+`;
 
-const SubmitButton = styled.button``;
+const ButtonContainer = styled.a`
+  display: flex;
+  justify-content: space-around;
+  font-size: 0.8rem;
+`;
 
-const CancelButton = styled.button``;
+const Button = styled.button`
+  width: 30%;
+  padding: 4px 0 4px 0;
+  font: var(--general-font);
+`;
 
 export function Form({ ingredient, editIngredients }) {
   const [filteredFlavors, setFilteredFlavors] = useState();
   const [message, setMessage] = useState("");
   const [urlMessage, setUrlMessage] = useState(false);
-  const [selectedFlavors, setSelectedFlavors] = useState([]);
+  const [selectedFlavor, setSelectedFlavor] = useState("");
   const [flavorSearchTerm, setFlavorSearchTerm] = useState();
   const [nameInput, setNameInput] = useState("");
   const [urlInput, setUrlInput] = useState("");
@@ -86,8 +97,13 @@ export function Form({ ingredient, editIngredients }) {
     if (ingredient) {
       setNameInput(ingredient.name);
       ingredient.url && setUrlInput(ingredient.url);
+      setSelectedFlavor(ingredient.flavorProfile);
     }
   }, [ingredient]);
+
+  if (!ingredient) {
+    return <div>Loading...</div>;
+  }
 
   function handleNameChange() {
     const newName = event.target.value;
@@ -99,17 +115,6 @@ export function Form({ ingredient, editIngredients }) {
     const newUrl = event.target.value;
     ingredient.url = newUrl;
     setUrlInput(newUrl);
-  }
-
-  useEffect(() => {
-    if (!ingredient) {
-      return;
-    }
-    setSelectedFlavors([ingredient.flavorProfile]);
-  }, [ingredient]);
-
-  if (!ingredient) {
-    return <div>Loading...</div>;
   }
 
   function handleFlavorChange(event) {
@@ -139,20 +144,12 @@ export function Form({ ingredient, editIngredients }) {
   function handleClickFlavor(clickedFlavor) {
     setFilteredFlavors("");
     setFlavorSearchTerm("");
-    setSelectedFlavors([clickedFlavor, ...selectedFlavors]);
-  }
-
-  function removeFlavor(flavorToRemove) {
-    const flavors = selectedFlavors;
-    const flavorsWithoutDeletedOne = flavors.filter(
-      (flavor) => flavor !== flavorToRemove
-    );
-    setSelectedFlavors(flavorsWithoutDeletedOne);
+    setSelectedFlavor(clickedFlavor);
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-    if (selectedFlavors.length === 0) {
+    if (SelectedFlavor.length === 0) {
       setMessage("Select at least one flavor");
       return;
     }
@@ -162,7 +159,7 @@ export function Form({ ingredient, editIngredients }) {
     img.onload = function () {
       const data = new FormData(event.target);
       const userIngredient = Object.fromEntries(data);
-      userIngredient.flavorProfile = selectedFlavors[0]; // if only one flavor is selected for now
+      userIngredient.flavorProfile = SelectedFlavor;
       userIngredient._id = ingredient._id;
       editIngredients(userIngredient);
       router.push("/ingredients");
@@ -175,10 +172,6 @@ export function Form({ ingredient, editIngredients }) {
     img.src = newUrl;
   }
 
-  function cancel() {
-    router.push("/ingredients");
-  }
-
   return (
     <StyledForm onSubmit={handleSubmit}>
       <SingleInputSection>
@@ -187,7 +180,7 @@ export function Form({ ingredient, editIngredients }) {
           type="text"
           id="input-ingredient"
           name="name"
-          maxLength={12}
+          maxLength={16}
           value={ingredient.name}
           onChange={handleNameChange}
           required
@@ -222,29 +215,26 @@ export function Form({ ingredient, editIngredients }) {
             </DropDown>
           )}
         </FieldAndDropDown>
-        {selectedFlavors.length !== 0 && (
-          <SelectedFlavors>
-            {selectedFlavors.map((flavor) => (
-              <FlavorTag
-                key={uid()}
-                style={{
-                  backgroundColor: `var(--${flavor.toLowerCase()}-color)`,
-                }}
-              >
-                {flavor}
-                <DeleteFlavorButton
-                  type="button"
-                  onClick={() => {
-                    removeFlavor(flavor);
-                  }}
-                >
-                  X
-                </DeleteFlavorButton>
-              </FlavorTag>
-            ))}
-          </SelectedFlavors>
-        )}
       </SingleInputSection>
+      {selectedFlavor && (
+        <FlavorTag
+          key={uid()}
+          style={{
+            backgroundColor: `var(--${selectedFlavor.toLowerCase()}-color)`,
+          }}
+        >
+          {selectedFlavor}
+          <DeleteFlavorButton
+            type="button"
+            onClick={() => {
+              () => setSelectedFlavor("");
+            }}
+          >
+            X
+          </DeleteFlavorButton>
+        </FlavorTag>
+      )}
+
       <SingleInputSection>
         <LabelAndMessage>
           <InputLabel htmlFor="input-url">Image-URL</InputLabel>
@@ -259,8 +249,10 @@ export function Form({ ingredient, editIngredients }) {
           required
         />
       </SingleInputSection>
-      <SubmitButton type="submit">Submit</SubmitButton>
-      <CancelButton onClick={() => cancel()}>Cancel</CancelButton>
+      <ButtonContainer>
+        <Button type="submit">Submit</Button>
+        <Button onClick={() => router.push("/ingredients")}>Cancel</Button>
+      </ButtonContainer>
     </StyledForm>
   );
 }

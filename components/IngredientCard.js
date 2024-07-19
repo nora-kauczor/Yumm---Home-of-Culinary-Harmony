@@ -6,8 +6,10 @@ const CardWrapper = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-  background-color: #f5f5f5;
+  align-items: center;
+  background-color: var(--card-background-color);
   padding: 20px;
+  gap: 7px;
   border-radius: 1rem;
 `;
 
@@ -17,7 +19,8 @@ const IngredientName = styled.a`
   display: flex;
   width: 100%;
   text-decoration: none;
-  color: inherit;
+  color: var(--card-font-color);
+  background-color: var(--card-background-color);
 `;
 
 const FlavorTag = styled.a`
@@ -29,10 +32,11 @@ const EditButton = styled.a`
   border-radius: 1rem;
   padding: 10px;
   text-decoration: none;
+  background-color: lightgrey;
   color: inherit;
 `;
 
-export function IngredientCard({ ingredient, handleClickFlavor }) {
+export function IngredientCard({ ingredient, filterIngredients }) {
   const flavorColor = getFlavorColor(ingredient.flavorProfile);
 
   return (
@@ -42,7 +46,7 @@ export function IngredientCard({ ingredient, handleClickFlavor }) {
       </IngredientName>
       <FlavorTag
         style={{ backgroundColor: flavorColor }}
-        onClick={() => handleClickFlavor(ingredient.flavorProfile)}
+        onClick={() => filterIngredients(ingredient.flavorProfile)}
       >
         {ingredient.flavorProfile}
       </FlavorTag>

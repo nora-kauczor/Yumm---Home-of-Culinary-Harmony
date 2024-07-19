@@ -1,7 +1,7 @@
 import { Layout } from "@/components/Layout";
 import GlobalStyle from "../styles";
 import { SWRConfig } from "swr";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { initialIngredients } from "@/lib/ingredients";
 import useLocalStorageState from "use-local-storage-state";
 import { initialPairings } from "@/lib/pairings";
@@ -30,9 +30,30 @@ export default function App({ Component, pageProps }) {
     const index = ingredients.findIndex(
       (ingredient) => ingredient._id === editedIngredient._id
     );
-    const updatedIngredients = ingredients;
+    const updatedIngredients = [...ingredients];
     updatedIngredients[index] = editedIngredient;
     setIngredients(updatedIngredients);
+  }
+
+  const [filterResults, setFilterResults] = useState();
+  useEffect(() => {
+    if (!ingredients) {
+      return;
+    }
+    setFilterResults(ingredients);
+  }, [ingredients]);
+
+  function filterIngredients(clickedFlavor) {
+    console.log("filterIngredients was called", Date.now());
+    const ingredientsAfterClick = ingredients.filter(
+      (ingredient) => ingredient.flavorProfile === clickedFlavor
+    );
+    setFilterResults(ingredientsAfterClick);
+    console.log(
+      filterResults,
+      Date.now(),
+      "inside filterIngredients, after calling setter"
+    );
   }
 
   return (
@@ -45,6 +66,9 @@ export default function App({ Component, pageProps }) {
             ingredients={ingredients}
             pairings={pairings}
             editIngredients={editIngredients}
+            filterIngredients={filterIngredients}
+            filterResults={filterResults}
+            setFilterResults={setFilterResults}
           />
         </Layout>
       </SWRConfig>
