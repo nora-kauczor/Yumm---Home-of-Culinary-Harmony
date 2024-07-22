@@ -51,6 +51,13 @@ export default function App({ Component, pageProps }) {
     setIngredients(extendedIngredients);
   }
 
+  function deleteIngredient(IngredientToBeDeleted) {
+    const ingredientsWithoutDeletedOne = ingredients.filter(
+      (ingredient) => ingredient._id !== IngredientToBeDeleted._id
+    );
+    setIngredients(ingredientsWithoutDeletedOne);
+  }
+
   return (
     <>
       <SWRConfig value={{ fetcher }}>

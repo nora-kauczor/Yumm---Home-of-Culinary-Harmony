@@ -161,6 +161,7 @@ export function Form({ ingredient, editIngredient, addIngredient }) {
     const userIngredient = Object.fromEntries(data);
     userIngredient.flavorProfile = selectedFlavor;
     userIngredient._id = ingredient ? ingredient._id : uid();
+    userIngredient.byUser = true;
     ingredient ? editIngredient(userIngredient) : addIngredient(userIngredient);
     router.push("/ingredients");
     // };
