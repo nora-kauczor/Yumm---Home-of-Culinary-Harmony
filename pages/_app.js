@@ -71,6 +71,7 @@ export default function App({ Component, pageProps }) {
             filterResults={filterResults}
             setFilterResults={setFilterResults}
             addIngredient={addIngredient}
+            deleteIngredient={deleteIngredient}
           />
         </Layout>
       </SWRConfig>

@@ -36,7 +36,19 @@ const EditButton = styled.a`
   color: inherit;
 `;
 
-export function IngredientCard({ ingredient, filterIngredients }) {
+const DeleteButton = styled.button`
+  border-radius: 1rem;
+  padding: 10px;
+  text-decoration: none;
+  background-color: lightgrey;
+  color: inherit;
+`;
+
+export function IngredientCard({
+  ingredient,
+  filterIngredients,
+  deleteIngredient,
+}) {
   const flavorColor = getFlavorColor(ingredient.flavorProfile);
 
   return (
@@ -51,6 +63,9 @@ export function IngredientCard({ ingredient, filterIngredients }) {
         {ingredient.flavorProfile}
       </FlavorTag>
       <EditButton href={`/form/${ingredient._id}`}>Edit</EditButton>
+      <DeleteButton type="button" onClick={() => deleteIngredient(ingredient)}>
+        Delete
+      </DeleteButton>
     </CardWrapper>
   );
 }
