@@ -64,32 +64,23 @@ export default function PairingCard({
 }) {
   const router = useRouter();
 
-  // const goToFilteredFlavors = useCallback(
-  //   (flavor) => {
-  //     filterIngredients(flavor);
-  //     router.push("/ingredients");
-  //     console.log("goToFilteredFlavors was called", Date.now());
-  //   },
-  //   [filterIngredients, router]
-  // );
+  if (!ingredients || !pairing) return <>Loading...</>;
 
-  function goToFilteredFlavors(flavor) {
+  function goToFilteredIngredients(flavor) {
     console.log("goToFilteredFlavors was called", Date.now());
     filterIngredients(flavor);
     router.push("/ingredients");
   }
 
-  if (!ingredients || !pairing) return <>Loading...</>;
-
-  function findIngredient(id) {
+  function findIngredientById(id) {
     const foundIngredient = ingredients.find(
       (ingredient) => ingredient._id === id
     );
     return foundIngredient;
   }
 
-  const ingredient0 = findIngredient(pairing.ingredients[0]);
-  const ingredient1 = findIngredient(pairing.ingredients[1]);
+  const ingredient0 = findIngredientById(pairing.ingredients[0]);
+  const ingredient1 = findIngredientById(pairing.ingredients[1]);
   const flavor0 = ingredient0.flavorProfile;
   const flavor1 = ingredient1.flavorProfile;
   const color0 = getFlavorColor(flavor0);
@@ -109,13 +100,13 @@ export default function PairingCard({
       <FlavorsSection>
         <FlavorTag
           style={{ backgroundColor: color0 }}
-          onClick={() => goToFilteredFlavors(flavor0)}
+          onClick={() => goToFilteredIngredients(flavor0)}
         >
           {flavor0}{" "}
         </FlavorTag>
         <FlavorTag
           style={{ backgroundColor: color1 }}
-          onClick={() => goToFilteredFlavors(flavor1)}
+          onClick={() => goToFilteredIngredients(flavor1)}
         >
           {flavor1}{" "}
         </FlavorTag>
