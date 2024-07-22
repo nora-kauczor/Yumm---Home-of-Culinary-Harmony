@@ -82,7 +82,7 @@ const Button = styled.button`
   font: var(--general-font);
 `;
 
-export function Form({ ingredient, editIngredients }) {
+export function Form({ ingredient, editIngredient, addIngredient }) {
   const [filteredFlavors, setFilteredFlavors] = useState();
   const [message, setMessage] = useState("");
   const [urlMessage, setUrlMessage] = useState(false);
@@ -101,19 +101,19 @@ export function Form({ ingredient, editIngredients }) {
     }
   }, [ingredient]);
 
-  if (!ingredient) {
-    return <div>Loading...</div>;
-  }
+  // if (!ingredient) {
+  //   return <div>Loading...</div>;
+  // }
 
   function handleNameChange() {
     const newName = event.target.value;
-    ingredient.name = newName;
+    ingredient && (ingredient.name = newName);
     setNameInput(newName);
   }
 
   function handleUrlChange() {
     const newUrl = event.target.value;
-    ingredient.url = newUrl;
+    ingredient && (ingredient.url = newUrl);
     setUrlInput(newUrl);
   }
 
@@ -149,27 +149,28 @@ export function Form({ ingredient, editIngredients }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    if (SelectedFlavor.length === 0) {
+    if (selectedFlavor.length === 0) {
       setMessage("Select at least one flavor");
       return;
     }
 
-    const newUrl = urlInput;
-    const img = new Image();
-    img.onload = function () {
-      const data = new FormData(event.target);
-      const userIngredient = Object.fromEntries(data);
-      userIngredient.flavorProfile = SelectedFlavor;
-      userIngredient._id = ingredient._id;
-      editIngredients(userIngredient);
-      router.push("/ingredients");
-    };
+    // const newUrl = urlInput;
+    // const img = new Image();
+    // img.onload = function () {
+    const data = new FormData(event.target);
+    const userIngredient = Object.fromEntries(data);
+    userIngredient.flavorProfile = selectedFlavor;
+    userIngredient._id = ingredient ? ingredient._id : uid();
+    userIngredient.byUser = true;
+    ingredient ? editIngredient(userIngredient) : addIngredient(userIngredient);
+    router.push("/ingredients");
+    // };
 
-    img.onerror = function () {
-      setUrlMessage(true);
-    };
+    // img.onerror = function () {
+    //   setUrlMessage(true);
+    // };
 
-    img.src = newUrl;
+    // img.src = newUrl;
   }
 
   return (
@@ -181,7 +182,7 @@ export function Form({ ingredient, editIngredients }) {
           id="input-ingredient"
           name="name"
           maxLength={16}
-          value={ingredient.name}
+          value={ingredient && ingredient.name}
           onChange={handleNameChange}
           required
         />
@@ -244,9 +245,9 @@ export function Form({ ingredient, editIngredients }) {
           type="url"
           id="input-url"
           name="url"
-          value={ingredient.url}
+          value={ingredient && ingredient.url}
           onChange={handleUrlChange}
-          required
+          // required
         />
       </SingleInputSection>
       <ButtonContainer>

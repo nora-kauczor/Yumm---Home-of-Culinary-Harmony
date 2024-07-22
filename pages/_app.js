@@ -1,10 +1,9 @@
 import { Layout } from "@/components/Layout";
 import GlobalStyle from "../styles";
 import { SWRConfig } from "swr";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { initialIngredients } from "@/lib/ingredients";
 import useLocalStorageState from "use-local-storage-state";
-import { initialPairings } from "@/lib/pairings";
 
 const fetcher = async (url) => {
   const res = await fetch(url);
@@ -20,10 +19,6 @@ const fetcher = async (url) => {
 export default function App({ Component, pageProps }) {
   const [ingredients, setIngredients] = useLocalStorageState("ingredients", {
     defaultValue: initialIngredients,
-  });
-
-  const [pairings, setPairings] = useLocalStorageState("pairings", {
-    defaultValue: initialPairings,
   });
 
   function editIngredients(editedIngredient) {
@@ -50,6 +45,19 @@ export default function App({ Component, pageProps }) {
     setFilterResults(ingredientsAfterClick);
   }
 
+  function addIngredient(newIngredient) {
+    const extendedIngredients = [...ingredients, newIngredient];
+    console.log(extendedIngredients);
+    setIngredients(extendedIngredients);
+  }
+
+  function deleteIngredient(IngredientToBeDeleted) {
+    const ingredientsWithoutDeletedOne = ingredients.filter(
+      (ingredient) => ingredient._id !== IngredientToBeDeleted._id
+    );
+    setIngredients(ingredientsWithoutDeletedOne);
+  }
+
   return (
     <>
       <SWRConfig value={{ fetcher }}>
@@ -58,11 +66,11 @@ export default function App({ Component, pageProps }) {
           <Component
             {...pageProps}
             ingredients={ingredients}
-            pairings={pairings}
             editIngredients={editIngredients}
             filterIngredients={filterIngredients}
             filterResults={filterResults}
             setFilterResults={setFilterResults}
+            addIngredient={addIngredient}
           />
         </Layout>
       </SWRConfig>
