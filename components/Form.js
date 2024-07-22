@@ -82,7 +82,20 @@ const Button = styled.button`
   font: var(--general-font);
 `;
 
-export function Form({ ingredient, editIngredient, addIngredient }) {
+const DeleteButton = styled.button`
+  border-radius: 1rem;
+  padding: 10px;
+  text-decoration: none;
+  background-color: lightgrey;
+  color: inherit;
+`;
+
+export function Form({
+  ingredient,
+  editIngredient,
+  addIngredient,
+  deleteIngredient,
+}) {
   const [filteredFlavors, setFilteredFlavors] = useState();
   const [message, setMessage] = useState("");
   const [urlMessage, setUrlMessage] = useState(false);
@@ -173,6 +186,10 @@ export function Form({ ingredient, editIngredient, addIngredient }) {
     // img.src = newUrl;
   }
 
+  function handleClickDelete() {
+    deleteIngredient(ingredient);
+    router.push("/ingredients");
+  }
   return (
     <StyledForm onSubmit={handleSubmit}>
       <SingleInputSection>
@@ -253,6 +270,11 @@ export function Form({ ingredient, editIngredient, addIngredient }) {
       <ButtonContainer>
         <Button type="submit">Submit</Button>
         <Button onClick={() => router.push("/ingredients")}>Cancel</Button>
+        {ingredient && (
+          <DeleteButton type="button" onClick={handleClickDelete}>
+            Delete
+          </DeleteButton>
+        )}
       </ButtonContainer>
     </StyledForm>
   );

@@ -111,6 +111,7 @@ export function IngredientsOverview({
   filterIngredients,
   filterResults,
   setFilterResults,
+  deleteIngredient,
 }) {
   const [noResults, setNoResults] = useState(false);
   const [filteredFlavors, setFilteredFlavors] = useState();
@@ -197,6 +198,7 @@ export function IngredientsOverview({
               key={ingredient._id}
               ingredient={ingredient}
               filterIngredients={filterIngredients}
+              deleteIngredient={deleteIngredient}
             />
           ))}
       </IngredientList>

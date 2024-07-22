@@ -2,6 +2,7 @@ import Image from "next/image";
 import styled from "styled-components";
 import customImageLoader from "../utils/customImageLoader";
 import { getFlavorColor } from "@/utils/getFlavorColor";
+import { useRouter } from "next/router";
 
 const DetailsContainer = styled.div`
   margin: 20px 45px 0 45px;
@@ -51,10 +52,22 @@ const EditButton = styled.a`
   margin: 0;
 `;
 
-export function IngredientDetails({ ingredient }) {
+const DeleteButton = styled.button`
+  border-radius: 1rem;
+  padding: 10px;
+  text-decoration: none;
+  background-color: lightgrey;
+  color: inherit;
+`;
+
+export function IngredientDetails({ ingredient, deleteIngredient }) {
+  const router = useRouter();
   if (!ingredient) return <>Loading...</>;
   const flavorColor = getFlavorColor(ingredient.flavorProfile);
-
+  function handleClick() {
+    deleteIngredient(ingredient);
+    router.push("/ingredients");
+  }
   return (
     <DetailsContainer>
       <NameAndTag>
@@ -76,6 +89,9 @@ export function IngredientDetails({ ingredient }) {
       <ButtonContainer>
         <BackButton href={"/ingredients"}>Back</BackButton>
         <EditButton href={`/form/${ingredient._id}`}>Edit</EditButton>
+        <DeleteButton type="button" onClick={handleClick}>
+          Delete
+        </DeleteButton>
       </ButtonContainer>
     </DetailsContainer>
   );

@@ -10,6 +10,7 @@ export default function IngredientsPage({
   userInput,
   setUserInput,
   filterIngredients,
+  deleteIngredient,
 }) {
   return (
     <>
@@ -23,6 +24,7 @@ export default function IngredientsPage({
         userInput={userInput}
         setUserInput={setUserInput}
         filterIngredients={filterIngredients}
+        deleteIngredient={deleteIngredient}
       />
     </>
   );
