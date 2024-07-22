@@ -214,40 +214,24 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
         return true;
       }
     });
-    console.log("matchingPairingsOfOtherInput: ", matchingPairingsOfOtherInput);
     const flavorsOfRelevantPairings = matchingPairingsOfOtherInput.map(
       (pairing) => {
         const flavors = getFlavorsOfPairing(pairing);
         return flavors;
       }
     );
-    // Turn into one single array
     const relevantFlavorsOneArray = flavorsOfRelevantPairings.flat();
-
-    // Delete doublets
     const relevantFlavorsWithoutDoublets = [
       ...new Set(relevantFlavorsOneArray),
     ];
-    // Filter out the flavor picked in the other input field
     const relevantFlavorsWithoutPickedFlavor =
       relevantFlavorsWithoutDoublets.filter(
         (flavor) => flavor !== concurringFlavorOtherInput
       );
-    console.log(
-      "relevantFlavorsWithoutPickedFlavor: ",
-      relevantFlavorsWithoutPickedFlavor,
-      "newInput :",
-      newInput
-    );
     const matchingFlavors = getMatchingFlavors(
       newInput,
       relevantFlavorsWithoutPickedFlavor
     );
-    console.log(
-      "matching flavors if there is a flavor in the other input ",
-      matchingFlavors
-    );
-
     if (source === "input0") {
       setFilteredFlavors0(matchingFlavors || []);
     } else {
