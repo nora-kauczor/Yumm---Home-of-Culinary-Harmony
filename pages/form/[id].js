@@ -2,7 +2,7 @@ import { Form } from "@/components/Form";
 
 import { useRouter } from "next/router";
 
-export default function FormPage({ editIngredients, ingredients }) {
+export default function EditPage({ editIngredients, ingredients }) {
   const router = useRouter();
   const { id } = router.query;
   if (!ingredients) {

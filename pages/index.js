@@ -7,11 +7,11 @@ export default function HomePage() {
         <h3>It&apos;s nice to have you here.</h3>
         <p>
           {" "}
-          Yumm! is your ultimate guide to the world of flavors. Whether you're a
-          professional chef or a home cook, Yumm! helps you discover, store, and
-          master the art of flavor combinations. Our app provides a vast library
-          of flavors and ingredients, along with expert advice on how to combine
-          them to create mouth-watering dishes.{" "}
+          Yumm! is your ultimate guide to the world of flavors. Whether
+          you&apos;re a professional chef or a home cook, Yumm! helps you
+          discover, store, and master the art of flavor combinations. Our app
+          provides a vast library of flavors and ingredients, along with expert
+          advice on how to combine them to create mouth-watering dishes.{" "}
         </p>{" "}
         <p>
           Whether you&apos;re experimenting in the kitchen or looking to perfect

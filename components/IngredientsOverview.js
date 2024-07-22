@@ -93,6 +93,19 @@ const WhiteSpace = styled.div`
   height: 45px;
 `;
 
+const AddButton = styled.a`
+  text-decoration: none;
+  color: inherit;
+  position: fixed;
+  font-size: 70px;
+  z-index: 1;
+  padding: 1rem;
+  margin: 0;
+  background-color: yellow;
+  border-radius: 5rem;
+  bottom: 2rem;
+`;
+
 export function IngredientsOverview({
   ingredients,
   filterIngredients,
@@ -188,6 +201,7 @@ export function IngredientsOverview({
           ))}
       </IngredientList>
       <WhiteSpace />
+      <AddButton href="/form/add">+</AddButton>
     </OverviewContainer>
   );
 }
