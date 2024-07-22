@@ -9,6 +9,7 @@ export default function IngredientsPage({
   setFilterResults,
   userInput,
   setUserInput,
+  filterIngredients,
 }) {
   return (
     <>
@@ -21,6 +22,7 @@ export default function IngredientsPage({
         setFilterResults={setFilterResults}
         userInput={userInput}
         setUserInput={setUserInput}
+        filterIngredients={filterIngredients}
       />
     </>
   );

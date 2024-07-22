@@ -171,13 +171,15 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
     }
   }
 
-  function handleChange() {
+  function handleChange(event) {
     const source = event.target.name;
     const newInput = event.target.value;
     if (source === "input0") {
       setInput0(newInput);
+      setFilteredFlavors1([]);
     } else {
       setInput1(newInput);
+      setFilteredFlavors0([]);
     }
     if (!newInput) {
       if (source === "input0") {
@@ -187,17 +189,13 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
       }
       return;
     }
+
     const otherInput = source === "input0" ? input1 : input0;
     const concurringFlavorOtherInput = otherInput
       ? getConcurringFlavor(otherInput, flavors)
       : null;
-    console.log("otherInput :", otherInput);
     if (!concurringFlavorOtherInput) {
       const matchingFlavors = getMatchingFlavors(newInput, flavors);
-      console.log(
-        "matching flavors if there is no flavor in the other input ",
-        matchingFlavors
-      );
       if (source === "input0") {
         setFilteredFlavors0(matchingFlavors || []);
       } else {
@@ -240,94 +238,84 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
     return;
   }
 
-  // function doesAFlavorMatch(pairing, searchedFlavor) {
-  //   const pairingFlavors = findFlavorsOfPairing(pairing);
-  //   const matchingFlavor = pairingFlavors.find(
-  //     (flavor) => flavor === searchedFlavor
-  //   );
-  //   return true;
-  // }
+  function handleClickDropDown(clickedFlavor) {
+    const source = event.target.name;
+    source.includes("0") ? setInput0(clickedFlavor) : setInput1(clickedFlavor);
+    setFilteredFlavors0([]);
+    setFilteredFlavors1([]);
+    const matchesClickedFlavor = pairings.filter((pairing) => {
+      const pairingFlavors = getFlavorsOfPairing(pairing);
+      return pairingFlavors.includes(clickedFlavor);
+    });
+    const otherInput = source.includes("0") ? input1 : input0;
+    const concurringFlavorOtherInput =
+      otherInput && getConcurringFlavor(otherInput, flavors);
+    if (!concurringFlavorOtherInput) {
+      setFilteredPairings(matchesClickedFlavor);
+      return;
+    }
+    const matchesForBothFlavors = matchesClickedFlavor.filter((pairing) => {
+      const pairingFlavors = getFlavorsOfPairing(pairing);
+      return pairingFlavors.includes(concurringFlavorOtherInput);
+    });
+    setFilteredPairings(matchesForBothFlavors);
+  }
 
-  // function handleClickDropDown(clickedFlavor) {
-  //   const source = event.target.name;
-  //   source === "input0" ? setFilteredFlavors0("") : setFilteredFlavors1("");
-  //   const currentUserInputs = [...userInputs];
-  //   const otherInput =
-  //     source === "input0" ? currentUserInputs[1] : currentUserInputs[0];
-  //   console.log(otherInput);
-
-  //   try {
-  //     const matchesClickedFlavor = pairings.filter((pairing) => {
-  //       const pairingFlavors = findFlavorsOfPairing(pairing);
-  //       return pairingFlavors.includes(clickedFlavor);
-  //     });
-
-  //     // if (!flavors.includes(otherInput)) {
-  //     setFilteredPairings(matchesClickedFlavor);
-  //     //   return;
-  //     // }
-  //     const matchingPairings = matchesClickedFlavor.filter((pairings) =>
-  //       doesAFlavorMatch(otherInput)
-  //     );
-  //     if (!matchingPairings) {
-  //       return;
-  //     } else {
-  //       setFilteredPairings(matchingPairings);
-  //     }
-  //   } catch {
-  //     ("An eroror occurred.");
-  //   }
-  // }
+  function reset() {
+    setInput0("");
+    setInput1("");
+  }
 
   return (
     <OverviewContainer>
       <FilterSection>
         <LabelAndMessage>
           <FilterLabel>
-            Search by single flavor or flavor combination
+            Search by single flavor or by flavor combination
+            <br />
+            Pick flavor from drop down
           </FilterLabel>
         </LabelAndMessage>
         <FieldDropDownAndButtonWrapper>
           <FieldAndDropDown>
-            <FilterField name="input0" value={input0} onChange={handleChange} />
-            {
-              // Array.isArray(filteredFlavors0) &&
-              filteredFlavors0.length !== 0 && (
-                <DropDown>
-                  {filteredFlavors0.map((flavor) => (
-                    <DropDownItem
-                      type="button"
-                      key={uid()}
-                      onClick={() => handleClickDropDown(flavor)}
-                    >
-                      {flavor}
-                    </DropDownItem>
-                  ))}
-                </DropDown>
-              )
-            }
+            <FilterField
+              name="input0"
+              value={input0}
+              onChange={() => handleChange(event)}
+            />
+            {filteredFlavors0.length !== 0 && (
+              <DropDown>
+                {filteredFlavors0.map((flavor) => (
+                  <DropDownItem
+                    type="button"
+                    key={uid()}
+                    name={`0-${flavor}`}
+                    onClick={() => handleClickDropDown(flavor)}
+                  >
+                    {flavor}
+                  </DropDownItem>
+                ))}
+              </DropDown>
+            )}
           </FieldAndDropDown>
           <FieldAndDropDown>
             <FilterField name="input1" value={input1} onChange={handleChange} />
-            {Array.isArray(filteredFlavors1) &&
-              filteredFlavors1.length !== 0 && (
-                <DropDown>
-                  {filteredFlavors1.map((flavor) => (
-                    <DropDownItem
-                      type="button"
-                      key={uid()}
-                      onClick={() => handleClickDropDown(flavor)}
-                    >
-                      {flavor}
-                    </DropDownItem>
-                  ))}
-                </DropDown>
-              )}
+            {filteredFlavors1.length !== 0 && (
+              <DropDown>
+                {filteredFlavors1.map((flavor) => (
+                  <DropDownItem
+                    type="button"
+                    key={uid()}
+                    name={`1-${flavor}`}
+                    onClick={() => handleClickDropDown(flavor)}
+                  >
+                    {flavor}
+                  </DropDownItem>
+                ))}
+              </DropDown>
+            )}
           </FieldAndDropDown>
-          <ResetButton
-            type="button"
-            // onClick={handleClickReset}
-          >
+          <ResetButton type="button" onClick={reset}>
             Reset
           </ResetButton>
         </FieldDropDownAndButtonWrapper>
