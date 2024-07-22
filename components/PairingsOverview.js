@@ -171,9 +171,16 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
     }
   }
 
-  function handleChange() {
+  function handleChange(event) {
     const source = event.target.name;
     const newInput = event.target.value;
+    if (source === "input0") {
+      setInput0(newInput);
+      setFilteredFlavors1([]);
+    } else {
+      setInput1(newInput);
+      setFilteredFlavors0([]);
+    }
     if (!newInput) {
       if (source === "input0") {
         setFilteredFlavors0([]);
@@ -181,13 +188,6 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
         setFilteredFlavors1([]);
       }
       return;
-    }
-    if (source === "input0") {
-      setInput0(newInput);
-      setFilteredFlavors1([]);
-    } else {
-      setInput1(newInput);
-      setFilteredFlavors0([]);
     }
 
     const otherInput = source === "input0" ? input1 : input0;
@@ -243,7 +243,6 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
     source.includes("0") ? setInput0(clickedFlavor) : setInput1(clickedFlavor);
     setFilteredFlavors0([]);
     setFilteredFlavors1([]);
-
     const matchesClickedFlavor = pairings.filter((pairing) => {
       const pairingFlavors = getFlavorsOfPairing(pairing);
       return pairingFlavors.includes(clickedFlavor);
@@ -273,11 +272,17 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
         <LabelAndMessage>
           <FilterLabel>
             Search by single flavor or by flavor combination
+            <br />
+            Pick flavor from drop down
           </FilterLabel>
         </LabelAndMessage>
         <FieldDropDownAndButtonWrapper>
           <FieldAndDropDown>
-            <FilterField name="input0" value={input0} onChange={handleChange} />
+            <FilterField
+              name="input0"
+              value={input0}
+              onChange={() => handleChange(event)}
+            />
             {filteredFlavors0.length !== 0 && (
               <DropDown>
                 {filteredFlavors0.map((flavor) => (
