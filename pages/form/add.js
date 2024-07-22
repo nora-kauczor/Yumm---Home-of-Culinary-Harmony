@@ -1,5 +1,5 @@
 import { Form } from "@/components/Form";
 
-export default function AddPage() {
-  return Form;
+export default function AddPage({ addIngredient }) {
+  return <Form addIngredient={addIngredient} />;
 }
