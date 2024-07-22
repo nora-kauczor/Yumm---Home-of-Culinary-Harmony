@@ -117,14 +117,9 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
   const [input1, setInput1] = useState("");
   const [filteredPairings, setFilteredPairings] = useState(pairings);
 
-  // useEffect(() => {
-  //   if (!pairings) return <>Loading...</>;
-  //   setFilteredPairings(pairings);
-  // }, [pairings]);
-
   if (!ingredients || !pairings) return <>Loading...</>;
 
-  function findMatchingFlavors(input, flavorsToCheck) {
+  function getMatchingFlavors(input, flavorsToCheck) {
     const lowerCaseInput = input.toLowerCase();
     const lowerCaseFlavors = flavorsToCheck.map((flavor) =>
       flavor.toLowerCase()
@@ -157,18 +152,14 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
     return capitalizedConcurringFlavor;
   }
 
-  function findIngredientById(id) {
-    const foundIngredient = ingredients.find(
-      (ingredient) => ingredient._id === id
-    );
-    return foundIngredient;
-  }
-
-  function findFlavorsOfPairing(pairing) {
+  function getFlavorsOfPairing(pairing) {
     try {
-      const IdArray = pairing.ingredients;
-      const ingredient0 = findIngredientById(IdArray[0]);
-      const ingredient1 = findIngredientById(IdArray[1]);
+      const ingredient0 = ingredients.find(
+        (ingredient) => ingredient._id === pairing.ingredients[0]
+      );
+      const ingredient1 = ingredients.find(
+        (ingredient) => ingredient._id === pairing.ingredients[1]
+      );
       const flavor0 = ingredient0.flavorProfile;
       const flavor1 = ingredient1.flavorProfile;
       return [flavor0, flavor1];
@@ -200,10 +191,13 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
     const concurringFlavorOtherInput = otherInput
       ? getConcurringFlavor(otherInput, flavors)
       : null;
-
+    console.log("otherInput :", otherInput);
     if (!concurringFlavorOtherInput) {
-      const matchingFlavors = findMatchingFlavors(newInput, flavors);
-
+      const matchingFlavors = getMatchingFlavors(newInput, flavors);
+      console.log(
+        "matching flavors if there is no flavor in the other input ",
+        matchingFlavors
+      );
       if (source === "input0") {
         setFilteredFlavors0(matchingFlavors || []);
       } else {
@@ -212,11 +206,7 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
       return;
     }
     const matchingPairingsOfOtherInput = pairings.filter((pairing) => {
-      const IdArray = pairing.ingredients;
-      const ingredient0 = findIngredientById(IdArray[0]);
-      const ingredient1 = findIngredientById(IdArray[1]);
-      const flavor0 = ingredient0.flavorProfile;
-      const flavor1 = ingredient1.flavorProfile;
+      const [flavor0, flavor1] = getFlavorsOfPairing(pairing);
       if (
         flavor0 === concurringFlavorOtherInput ||
         flavor1 === concurringFlavorOtherInput
@@ -224,10 +214,10 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
         return true;
       }
     });
-
+    console.log("matchingPairingsOfOtherInput: ", matchingPairingsOfOtherInput);
     const flavorsOfRelevantPairings = matchingPairingsOfOtherInput.map(
       (pairing) => {
-        const flavors = findFlavorsOfPairing(pairing);
+        const flavors = getFlavorsOfPairing(pairing);
         return flavors;
       }
     );
@@ -241,15 +231,22 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
     // Filter out the flavor picked in the other input field
     const relevantFlavorsWithoutPickedFlavor =
       relevantFlavorsWithoutDoublets.filter(
-        (flavor) => flavor === concurringFlavorOtherInput
+        (flavor) => flavor !== concurringFlavorOtherInput
       );
-
-    const matchingFlavors = findMatchingFlavors(
-      newInput,
-      relevantFlavorsWithoutDoublets
+    console.log(
+      "relevantFlavorsWithoutPickedFlavor: ",
+      relevantFlavorsWithoutPickedFlavor,
+      "newInput :",
+      newInput
     );
-
-    console.log(matchingFlavors);
+    const matchingFlavors = getMatchingFlavors(
+      newInput,
+      relevantFlavorsWithoutPickedFlavor
+    );
+    console.log(
+      "matching flavors if there is a flavor in the other input ",
+      matchingFlavors
+    );
 
     if (source === "input0") {
       setFilteredFlavors0(matchingFlavors || []);
