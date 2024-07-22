@@ -111,8 +111,8 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
     defaultValue: initialPairings,
   });
 
-  const [filteredFlavors0, setFilteredFlavors0] = useState();
-  const [filteredFlavors1, setFilteredFlavors1] = useState();
+  const [filteredFlavors0, setFilteredFlavors0] = useState([]);
+  const [filteredFlavors1, setFilteredFlavors1] = useState([]);
   const [input0, setInput0] = useState("");
   const [input1, setInput1] = useState("");
   const [filteredPairings, setFilteredPairings] = useState(pairings);
@@ -124,18 +124,12 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
 
   if (!ingredients || !pairings) return <>Loading...</>;
 
-  function findMatchingFlavors(newInput, flavorsToCheck) {
-    const lowerCaseInput = newInput.toLowerCase();
-    console.log(
-      "flavors array inside findMatchingFlavors function: ",
-      flavorsToCheck,
-      " and input :",
-      newInput
-    );
+  async function findMatchingFlavors(input, flavorsToCheckPromies) {
+    const flavorsToCheck = await flavorsToCheckPromise;
+    const lowerCaseInput = input.toLowerCase();
     const lowerCaseFlavors = flavorsToCheck.map((flavor) =>
       flavor.toLowerCase()
     );
-
     const matchingFlavors = lowerCaseFlavors.filter((flavor) =>
       flavor.startsWith(lowerCaseInput)
     );
@@ -148,18 +142,20 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
     return capitalizedMatchingFlavors;
   }
 
-  function findMatchingPairings(flavor, pairings) {
-    const matchingPairings = pairings.map((pairing) => {
-      const IdArray = pairing.ingredients;
-      const ingredient0 = findIngredientById(IdArray[0]);
-      const ingredient1 = findIngredientById(IdArray[1]);
-      const flavor0 = ingredient0.flavorProfile;
-      const flavor1 = ingredient1.flavorProfile;
-      if (flavor0 === flavor || flavor1 === flavor) {
-        return pairing;
-      }
-    });
-    return matchingPairings;
+  function getConcurringFlavor(input, flavorsToCheck) {
+    const lowerCaseInput = input.toLowerCase();
+    const lowerCaseFlavors = flavorsToCheck.map((flavor) =>
+      flavor.toLowerCase()
+    );
+    const concurringFlavor = lowerCaseFlavors.find(
+      (flavor) => flavor === lowerCaseInput
+    );
+    if (!concurringFlavor) {
+      return;
+    }
+    const capitalizedConcurringFlavor =
+      concurringFlavor.charAt(0).toUpperCase() + concurringFlavor.slice(1);
+    return capitalizedConcurringFlavor;
   }
 
   function findIngredientById(id) {
@@ -168,8 +164,6 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
     );
     return foundIngredient;
   }
-
-  // console.log(pairings.map((pairing) => findFlavorsOfPairing(pairing)));
 
   function findFlavorsOfPairing(pairing) {
     try {
@@ -197,53 +191,39 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
     }
     if (!newInput) {
       if (source === "input0") {
-        setFilteredFlavors0("");
+        setFilteredFlavors0([]);
       } else {
-        setFilteredFlavors1("");
+        setFilteredFlavors1([]);
       }
       return;
     }
     const otherInput = source === "input0" ? input1 : input0;
-    console.log("otherInput :", otherInput);
-    const matchingFlavorsOtherInput = otherInput
-      ? findMatchingFlavors(otherInput, flavors)
+    const concurringFlavorOtherInput = otherInput
+      ? getConcurringFlavor(otherInput, flavors)
       : null;
-    console.log("matchingFlavorsOtherInput: ", matchingFlavorsOtherInput);
-    // STEP 3A: Anderer Input ist kein Flavor
-    if (!matchingFlavorsOtherInput) {
+
+    if (!concurringFlavorOtherInput) {
       const matchingFlavors = findMatchingFlavors(newInput, flavors);
-      if (matchingFlavors && source === "input0") {
-        setFilteredFlavors0(matchingFlavors);
-      }
-      if (matchingFlavors && source === "input1") {
-        setFilteredFlavors1(matchingFlavors);
-      }
-      if (!matchingFlavors && source === "input0") {
-        setFilteredFlavors0("");
-      }
-      if (!matchingFlavors && source === "input1") {
-        setFilteredFlavors1("");
+      if (source === "input0") {
+        setFilteredFlavors0(matchingFlavors || []);
+      } else {
+        setFilteredFlavors1(matchingFlavors || []);
       }
       return;
     }
-    // STEP 3B: Anderer Input ist ein Flavor
-
-    // const matchingPairingsOfOtherInput = matchingFlavorsOtherInput.map(
-    //   (flavor) => {
-    //     const matches = findMatchingPairings(flavor, pairings);
-    //     if (matches) return matches;
-    //   }
-    // );
-    // const pairingsOtherInputWithoutEmptyObjects =
-    //   matchingPairingsOfOtherInput.filter((pairing) => pairing === null);
-
-    // return array of objects but only those that match an dleave out others
-
-    // console.log("matchingPairingsOfOtherInput: ", matchingPairingsOfOtherInput);
-    // console.log(
-    //   "pairingsOtherInputWithoutEmptyObjects: ",
-    //   pairingsOtherInputWithoutEmptyObjects
-    // );
+    const matchingPairingsOfOtherInput = pairings.filter((pairing) => {
+      const IdArray = pairing.ingredients;
+      const ingredient0 = findIngredientById(IdArray[0]);
+      const ingredient1 = findIngredientById(IdArray[1]);
+      const flavor0 = ingredient0.flavorProfile;
+      const flavor1 = ingredient1.flavorProfile;
+      if (
+        flavor0 === concurringFlavorOtherInput ||
+        flavor1 === concurringFlavorOtherInput
+      ) {
+        return true;
+      }
+    });
 
     const flavorsOfRelevantPairings = matchingPairingsOfOtherInput.map(
       (pairing) => {
@@ -251,35 +231,27 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
         return flavors;
       }
     );
-    console.log("flavorsOfRelevantPairings: ", flavorsOfRelevantPairings);
 
     const matchingFlavors = findMatchingFlavors(
       newInput,
       flavorsOfRelevantPairings
     );
 
-    if (matchingFlavors & (source === "input0")) {
-      setFilteredFlavors0(matchingFlavors);
-    }
-    if (matchingFlavors & (source === "input1")) {
-      setFilteredFlavors1(matchingFlavors);
-    }
-    if (!matchingFlavors & (source === "input0")) {
-      setFilteredFlavors0("");
-    }
-    if (!matchingFlavors & (source === "input1")) {
-      setFilteredFlavors1("");
+    if (source === "input0") {
+      setFilteredFlavors0(matchingFlavors || []);
+    } else {
+      setFilteredFlavors1(matchingFlavors || []);
     }
     return;
   }
 
-  function doesAFlavorMatch(pairing, searchedFlavor) {
-    const pairingFlavors = findFlavorsOfPairing(pairing);
-    const matchingFlavor = pairingFlavors.find(
-      (flavor) => flavor === searchedFlavor
-    );
-    return true;
-  }
+  // function doesAFlavorMatch(pairing, searchedFlavor) {
+  //   const pairingFlavors = findFlavorsOfPairing(pairing);
+  //   const matchingFlavor = pairingFlavors.find(
+  //     (flavor) => flavor === searchedFlavor
+  //   );
+  //   return true;
+  // }
 
   // function handleClickDropDown(clickedFlavor) {
   //   const source = event.target.name;
@@ -323,35 +295,37 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
         <FieldDropDownAndButtonWrapper>
           <FieldAndDropDown>
             <FilterField name="input0" value={input0} onChange={handleChange} />
-            {filteredFlavors0 && (
-              <DropDown>
-                {filteredFlavors0.map((flavor) => (
-                  <DropDownItem
-                    type="button"
-                    key={uid()}
-                    onClick={() => handleClickDropDown(flavor)}
-                  >
-                    {flavor}
-                  </DropDownItem>
-                ))}
-              </DropDown>
-            )}
+            {Array.isArray(filteredFlavors0) &&
+              filteredFlavors0.length !== 0 && (
+                <DropDown>
+                  {filteredFlavors0.map((flavor) => (
+                    <DropDownItem
+                      type="button"
+                      key={uid()}
+                      onClick={() => handleClickDropDown(flavor)}
+                    >
+                      {flavor}
+                    </DropDownItem>
+                  ))}
+                </DropDown>
+              )}
           </FieldAndDropDown>
           <FieldAndDropDown>
             <FilterField name="input1" value={input1} onChange={handleChange} />
-            {filteredFlavors1 && (
-              <DropDown>
-                {filteredFlavors1.map((flavor) => (
-                  <DropDownItem
-                    type="button"
-                    key={uid()}
-                    onClick={() => handleClickDropDown(flavor)}
-                  >
-                    {flavor}
-                  </DropDownItem>
-                ))}
-              </DropDown>
-            )}
+            {Array.isArray(filteredFlavors1) &&
+              filteredFlavors1.length !== 0 && (
+                <DropDown>
+                  {filteredFlavors1.map((flavor) => (
+                    <DropDownItem
+                      type="button"
+                      key={uid()}
+                      onClick={() => handleClickDropDown(flavor)}
+                    >
+                      {flavor}
+                    </DropDownItem>
+                  ))}
+                </DropDown>
+              )}
           </FieldAndDropDown>
           <ResetButton
             type="button"
