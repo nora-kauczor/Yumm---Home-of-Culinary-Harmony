@@ -108,31 +108,26 @@ export function IngredientsOverview({
   function handleChange() {
     const input = event.target.value;
     setUserInput(input);
-    // if input field is empty, set back filtered flavors (drop down options) and message and return
     if (!input) {
       setNoResults(false);
       setFilteredFlavors();
       return;
     }
-    // else, find matching flavors
     const lowerCaseInput = input.toLowerCase();
     const lowerCaseFlavors = flavors.map((flavor) => flavor.toLowerCase());
     const matchingFlavors = lowerCaseFlavors.filter((flavor) =>
       flavor.startsWith(lowerCaseInput)
     );
-    // if there's no matching flavors, set back filtered flavors (drop down options) and display error message and return
     if (matchingFlavors.length === 0) {
       setNoResults(true);
       setFilterResults(ingredients);
       setFilteredFlavors();
       return;
     }
-    // else, set matching flavors (have them displayed in drop down)
     const capitalizedMatchingFlavors = matchingFlavors.map(
       (flavor) => flavor.charAt(0).toUpperCase() + flavor.slice(1)
     );
     setFilteredFlavors(capitalizedMatchingFlavors);
-    // find matching ingredients and store them in filter Results state variable (ingredient cards which are being diplayed), set back message
     const matchingIngredients = ingredients.filter((ingredient) =>
       capitalizedMatchingFlavors.includes(ingredient.flavorProfile)
     );
