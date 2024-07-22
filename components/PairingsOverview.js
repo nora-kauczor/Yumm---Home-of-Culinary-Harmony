@@ -124,8 +124,7 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
 
   if (!ingredients || !pairings) return <>Loading...</>;
 
-  async function findMatchingFlavors(input, flavorsToCheckPromies) {
-    const flavorsToCheck = await flavorsToCheckPromise;
+  function findMatchingFlavors(input, flavorsToCheck) {
     const lowerCaseInput = input.toLowerCase();
     const lowerCaseFlavors = flavorsToCheck.map((flavor) =>
       flavor.toLowerCase()
@@ -204,6 +203,7 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
 
     if (!concurringFlavorOtherInput) {
       const matchingFlavors = findMatchingFlavors(newInput, flavors);
+
       if (source === "input0") {
         setFilteredFlavors0(matchingFlavors || []);
       } else {
@@ -231,11 +231,25 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
         return flavors;
       }
     );
+    // Turn into one single array
+    const relevantFlavorsOneArray = flavorsOfRelevantPairings.flat();
+
+    // Delete doublets
+    const relevantFlavorsWithoutDoublets = [
+      ...new Set(relevantFlavorsOneArray),
+    ];
+    // Filter out the flavor picked in the other input field
+    const relevantFlavorsWithoutPickedFlavor =
+      relevantFlavorsWithoutDoublets.filter(
+        (flavor) => flavor === concurringFlavorOtherInput
+      );
 
     const matchingFlavors = findMatchingFlavors(
       newInput,
-      flavorsOfRelevantPairings
+      relevantFlavorsWithoutDoublets
     );
+
+    console.log(matchingFlavors);
 
     if (source === "input0") {
       setFilteredFlavors0(matchingFlavors || []);
@@ -295,7 +309,8 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
         <FieldDropDownAndButtonWrapper>
           <FieldAndDropDown>
             <FilterField name="input0" value={input0} onChange={handleChange} />
-            {Array.isArray(filteredFlavors0) &&
+            {
+              // Array.isArray(filteredFlavors0) &&
               filteredFlavors0.length !== 0 && (
                 <DropDown>
                   {filteredFlavors0.map((flavor) => (
@@ -308,7 +323,8 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
                     </DropDownItem>
                   ))}
                 </DropDown>
-              )}
+              )
+            }
           </FieldAndDropDown>
           <FieldAndDropDown>
             <FilterField name="input1" value={input1} onChange={handleChange} />
