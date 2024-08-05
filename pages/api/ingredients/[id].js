@@ -1,6 +1,5 @@
 import dbConnect from "@/db/connect";
 import Ingredient from "@/db/models/Ingredients";
-import { getServerSession } from "next-auth";
 
 export default async function handler(request, response) {
   await dbConnect();
