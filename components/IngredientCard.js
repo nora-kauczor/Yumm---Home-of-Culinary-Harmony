@@ -38,10 +38,13 @@ const EditButton = styled.a`
 
 const DeleteButton = styled.button`
   border-radius: 1rem;
-  padding: 10px;
+  padding: 8px;
   text-decoration: none;
   background-color: lightgrey;
   color: inherit;
+  font: inherit;
+  line-height: 1.5;
+  border: none;
 `;
 
 export function IngredientCard({
