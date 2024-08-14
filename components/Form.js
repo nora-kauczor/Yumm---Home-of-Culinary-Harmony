@@ -17,7 +17,9 @@ const SingleInputSection = styled.div`
   gap: 5px;
 `;
 const InputLabel = styled.label``;
-const InputField = styled.input``;
+const InputField = styled.input`
+  background-color: white;
+`;
 
 const LabelAndMessage = styled.div`
   width: 100%;
