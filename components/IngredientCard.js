@@ -28,7 +28,7 @@ const FlavorTag = styled.a`
   padding: 10px;
 `;
 
-const EditButton = styled.a`
+const EditAnchor = styled.a`
   border-radius: 1rem;
   padding: 10px;
   text-decoration: none;
@@ -65,7 +65,7 @@ export function IngredientCard({
       >
         {ingredient.flavorProfile}
       </FlavorTag>
-      <EditButton href={`/form/${ingredient._id}`}>Edit</EditButton>
+      <EditAnchor href={`/form/${ingredient._id}`}>Edit</EditAnchor>
       <DeleteButton type="button" onClick={() => deleteIngredient(ingredient)}>
         Delete
       </DeleteButton>
