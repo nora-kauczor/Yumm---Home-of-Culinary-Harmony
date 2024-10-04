@@ -35,7 +35,6 @@ const FilterSection = styled.div`
   gap: 10px;
 `;
 
-// Upper part of filter section
 const LabelAndMessage = styled.div`
   width: 100%;
   display: flex;
@@ -47,7 +46,7 @@ const NoResultsMessage = styled.p`
   margin: 0;
   padding: 0;
 `;
-// Lower part of filter section
+
 const FieldDropDownAndButtonWrapper = styled.div`
   margin: 0;
   padding: 0;

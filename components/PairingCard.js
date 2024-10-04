@@ -1,6 +1,5 @@
 import { getFlavorColor } from "@/utils/getFlavorColor";
 import { useRouter } from "next/router";
-import { useCallback } from "react";
 import styled from "styled-components";
 
 const CardWrapper = styled.ul`
@@ -25,7 +24,7 @@ const IngredientsSection = styled.ul`
   list-style: none;
   gap: 10px;
   background-color: var(--card-background-color);
-  olor: var(--card-font-color);
+  color: var(--card-font-color);
 `;
 
 const IngredientName = styled.a`
@@ -67,7 +66,6 @@ export default function PairingCard({
   if (!ingredients || !pairing) return <>Loading...</>;
 
   function goToFilteredIngredients(flavor) {
-    console.log("goToFilteredFlavors was called", Date.now());
     filterIngredients(flavor);
     router.push("/ingredients");
   }
@@ -86,30 +84,45 @@ export default function PairingCard({
   const color0 = getFlavorColor(flavor0);
   const color1 = getFlavorColor(flavor1);
 
+  console.log("ingredient0: ", ingredient0);
+  console.log("ingredient1: ", ingredient1);
+
   return (
     <CardWrapper>
       <IngredientsSection>
-        <IngredientName href={`/${ingredient0._id}`}>
-          {ingredient0.name}
-        </IngredientName>
+        {ingredient0 && (
+          <IngredientName href={`/${ingredient0._id}`}>
+            {ingredient0.name}
+          </IngredientName>
+        )}
         <IngredientName>&</IngredientName>
-        <IngredientName href={`/${ingredient1._id}`}>
-          {ingredient1.name}
-        </IngredientName>
+        {ingredient1 && (
+          <IngredientName href={`/${ingredient1._id}`}>
+            {ingredient1.name}
+          </IngredientName>
+        )}
       </IngredientsSection>
       <FlavorsSection>
-        <FlavorTag
-          style={{ backgroundColor: color0 }}
-          onClick={() => goToFilteredIngredients(flavor0)}
-        >
-          {flavor0}{" "}
-        </FlavorTag>
-        <FlavorTag
-          style={{ backgroundColor: color1 }}
-          onClick={() => goToFilteredIngredients(flavor1)}
-        >
-          {flavor1}{" "}
-        </FlavorTag>
+        {ingredient0 && (
+          <FlavorTag
+            style={{
+              backgroundColor: color0,
+            }}
+            onClick={() => goToFilteredIngredients(flavor0)}
+          >
+            {flavor0}{" "}
+          </FlavorTag>
+        )}
+        {ingredient1 && (
+          <FlavorTag
+            style={{
+              backgroundColor: color1,
+            }}
+            onClick={() => goToFilteredIngredients(flavor1)}
+          >
+            {flavor1}{" "}
+          </FlavorTag>
+        )}
       </FlavorsSection>
       <ReasonSection>{pairing.reason}</ReasonSection>
     </CardWrapper>
