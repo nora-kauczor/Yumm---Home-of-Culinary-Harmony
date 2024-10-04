@@ -1,4 +1,4 @@
-import { IngredientsOverview } from "@/components/IngredientsOverview";
+import { IngredientOverview } from "@/components/IngredientOverview/IngredientOverview";
 
 export default function IngredientsPage({
   ingredients,
@@ -14,7 +14,7 @@ export default function IngredientsPage({
 }) {
   return (
     <>
-      <IngredientsOverview
+      <IngredientOverview
         ingredients={ingredients}
         handleClickFlavor={handleClickFlavor}
         filteredFlavors={filteredFlavors}

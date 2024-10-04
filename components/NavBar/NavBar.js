@@ -1,34 +1,13 @@
 import { useRouter } from "next/router";
-import styled from "styled-components";
-
-const NavList = styled.div`
-  display: flex;
-  justify-content: space-around;
-  list-style: none;
-  width: 100%;
-  height: var(--navbar-height);
-  bottom: 0;
-  position: fixed;
-  z-index: 1;
-  color: var(--card-background-color);
-`;
-
-const NavBarItem = styled.a`
-  width: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1rem;
-  background-color: var(--nav-background-color);
-`;
+import * as Style from "./NavBar.style";
 
 export function NavBar() {
   const router = useRouter();
   const { pathname } = router;
 
   return (
-    <NavList>
-      <NavBarItem
+    <Style.NavList>
+      <Style.NavBarItem
         type="button"
         onClick={() => {
           router.push("/ingredients");
@@ -41,8 +20,8 @@ export function NavBar() {
         }}
       >
         Ingredients
-      </NavBarItem>
-      <NavBarItem
+      </Style.NavBarItem>
+      <Style.NavBarItem
         type="button"
         onClick={() => {
           router.push("/pairings");
@@ -53,7 +32,7 @@ export function NavBar() {
         }}
       >
         Pairings
-      </NavBarItem>
-    </NavList>
+      </Style.NavBarItem>
+    </Style.NavList>
   );
 }

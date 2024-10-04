@@ -1,109 +1,11 @@
-import styled from "styled-components";
-import PairingCard from "./PairingCard";
+import * as Style from "./PairingsOverview.style";
+import PairingCard from "../PairingCard/PairingCard";
 import { useEffect, useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
 import { initialPairings } from "@/lib/pairings";
 import { flavors } from "@/lib/ingredients";
 import { uid } from "uid";
 import { Solitreo } from "next/font/google";
-
-const PairingsList = styled.ul`
-  list-style: none;
-  width: 80%;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-`;
-
-const WhiteSpace = styled.div`
-  height: 40px;
-`;
-
-const OverviewContainer = styled.div`
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-  gap: 23px;
-`;
-const FilterSection = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 10px;
-`;
-
-const LabelAndMessage = styled.div`
-  width: 100%;
-  display: flex;
-  gap: 30px;
-`;
-const FilterLabel = styled.label``;
-const NoResultsMessage = styled.p`
-  color: red;
-  margin: 0;
-  padding: 0;
-`;
-
-const FieldDropDownAndButtonWrapper = styled.div`
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: 10px;
-`;
-const FieldAndDropDown = styled.div`
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  position: relative;
-`;
-const FilterField = styled.input`
-  width: 100%;
-  padding: 7px 5px 5px 5px;
-  margin: 0;
-  position: absolute;
-  font-family: var(--general-font);
-  background-color: var(--card-background-color);
-`;
-const DropDown = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  z-index: 3;
-  position: absolute;
-  padding: 0;
-  margin: 0;
-  top: 29px;
-  border: 1px solid black;
-  border-top: none;
-`;
-const DropDownItem = styled.button`
-  text-align: left;
-  font-family: var(--general-font);
-  font-size: 15px;
-  border: none;
-  padding: 5px;
-  background-color: var(--card-background-color);
-`;
-
-const ResetButton = styled.button`
-  width: 30%;
-  background-color: lightgrey;
-  padding: 7px 5px 5px 5px;
-  font-family: var(--general-font);
-  font-size: 15px;
-  border: 1px solid black;
-`;
-
-const IngredientList = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-`;
 
 export default function PairingsOverview({ ingredients, filterIngredients }) {
   const [pairings, setPairings] = useLocalStorageState("pairings", {
@@ -266,60 +168,64 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
   }
 
   return (
-    <OverviewContainer>
-      <FilterSection>
-        <LabelAndMessage>
-          <FilterLabel>
+    <Style.OverviewContainer>
+      <Style.FilterSection>
+        <Style.LabelAndMessage>
+          <label>
             Search by single flavor or by flavor combination
             <br />
             Pick flavor from drop down
-          </FilterLabel>
-        </LabelAndMessage>
-        <FieldDropDownAndButtonWrapper>
-          <FieldAndDropDown>
-            <FilterField
+          </label>
+        </Style.LabelAndMessage>
+        <Style.FieldDropDownAndButtonWrapper>
+          <Style.FieldAndDropDown>
+            <Style.FilterField
               name="input0"
               value={input0}
               onChange={() => handleChange(event)}
             />
             {filteredFlavors0.length !== 0 && (
-              <DropDown>
+              <Style.DropDown>
                 {filteredFlavors0.map((flavor) => (
-                  <DropDownItem
+                  <Style.DropDownItem
                     type="button"
                     key={uid()}
                     name={`0-${flavor}`}
                     onClick={() => handleClickDropDown(flavor)}
                   >
                     {flavor}
-                  </DropDownItem>
+                  </Style.DropDownItem>
                 ))}
-              </DropDown>
+              </Style.DropDown>
             )}
-          </FieldAndDropDown>
-          <FieldAndDropDown>
-            <FilterField name="input1" value={input1} onChange={handleChange} />
+          </Style.FieldAndDropDown>
+          <Style.FieldAndDropDown>
+            <Style.FilterField
+              name="input1"
+              value={input1}
+              onChange={handleChange}
+            />
             {filteredFlavors1.length !== 0 && (
-              <DropDown>
+              <Style.DropDown>
                 {filteredFlavors1.map((flavor) => (
-                  <DropDownItem
+                  <Style.DropDownItem
                     type="button"
                     key={uid()}
                     name={`1-${flavor}`}
                     onClick={() => handleClickDropDown(flavor)}
                   >
                     {flavor}
-                  </DropDownItem>
+                  </Style.DropDownItem>
                 ))}
-              </DropDown>
+              </Style.DropDown>
             )}
-          </FieldAndDropDown>
-          <ResetButton type="button" onClick={reset}>
+          </Style.FieldAndDropDown>
+          <Style.ResetButton type="button" onClick={reset}>
             Reset
-          </ResetButton>
-        </FieldDropDownAndButtonWrapper>
-      </FilterSection>
-      <PairingsList>
+          </Style.ResetButton>
+        </Style.FieldDropDownAndButtonWrapper>
+      </Style.FilterSection>
+      <Style.PairingsList>
         {filteredPairings.map((pairing) => (
           <PairingCard
             pairing={pairing}
@@ -328,8 +234,8 @@ export default function PairingsOverview({ ingredients, filterIngredients }) {
             filterIngredients={filterIngredients}
           />
         ))}
-      </PairingsList>
-      <WhiteSpace />
-    </OverviewContainer>
+      </Style.PairingsList>
+      <Style.WhiteSpace />
+    </Style.OverviewContainer>
   );
 }

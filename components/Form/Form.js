@@ -1,96 +1,8 @@
 import { flavors } from "@/lib/ingredients";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import styled from "styled-components";
 import { uid } from "uid";
-
-const StyledForm = styled.form`
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  font-size: 15px;
-`;
-const SingleInputSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-`;
-const InputLabel = styled.label``;
-const InputField = styled.input`
-  background-color: white;
-`;
-
-const LabelAndMessage = styled.div`
-  width: 100%;
-  display: flex;
-  gap: 30px;
-`;
-const Message = styled.p`
-  color: red;
-  margin: 0;
-  padding: 0;
-`;
-
-const FieldAndDropDown = styled.div`
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  position: relative;
-`;
-
-const DropDown = styled.ul`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  z-index: 3;
-  position: absolute;
-  padding: 0;
-  margin: 0;
-  top: 29px;
-  border: 1px solid black;
-  border-top: none;
-`;
-
-const DropDownItem = styled.button`
-  text-align: left;
-  font-family: var(--general-font);
-  font-size: 15px;
-  border: none;
-  padding: 5px;
-  background-color: white;
-  width: 100%;
-`;
-
-const FlavorTag = styled.p`
-  border-radius: 1rem;
-  padding: 10px;
-  width: 50%;
-`;
-const DeleteFlavorButton = styled.button`
-  border-style: none;
-  font-weight: 10rem;
-`;
-
-const ButtonContainer = styled.a`
-  display: flex;
-  justify-content: space-around;
-  font-size: 0.8rem;
-`;
-
-const Button = styled.button`
-  width: 30%;
-  padding: 4px 0 4px 0;
-  font: var(--general-font);
-`;
-
-const DeleteButton = styled.button`
-  border-radius: 1rem;
-  padding: 10px;
-  text-decoration: none;
-  background-color: lightgrey;
-  color: inherit;
-`;
+import * as Style from "./Form.style";
 
 export function Form({
   ingredient,
@@ -193,10 +105,10 @@ export function Form({
     router.push("/ingredients");
   }
   return (
-    <StyledForm onSubmit={handleSubmit}>
-      <SingleInputSection>
-        <InputLabel htmlFor="input-ingredient">Name</InputLabel>
-        <InputField
+    <Style.StyledForm onSubmit={handleSubmit}>
+      <Style.SingleInputSection>
+        <Style.InputLabel htmlFor="input-ingredient">Name</Style.InputLabel>
+        <Style.InputField
           type="text"
           id="input-ingredient"
           name="name"
@@ -205,14 +117,14 @@ export function Form({
           onChange={handleNameChange}
           required
         />
-      </SingleInputSection>
-      <SingleInputSection>
-        <LabelAndMessage>
-          <InputLabel htmlFor="input-flavor">Flavor Tag</InputLabel>
-          {message && <Message>{message}</Message>}
-        </LabelAndMessage>
-        <FieldAndDropDown>
-          <InputField
+      </Style.SingleInputSection>
+      <Style.SingleInputSection>
+        <Style.LabelAndMessage>
+          <Style.InputLabel htmlFor="input-flavor">Flavor Tag</Style.InputLabel>
+          {message && <Style.Message>{message}</Style.Message>}
+        </Style.LabelAndMessage>
+        <Style.FieldAndDropDown>
+          <Style.InputField
             type="text"
             id="input-flavor"
             name="flavorProfile"
@@ -220,9 +132,9 @@ export function Form({
             value={flavorSearchTerm}
           />
           {filteredFlavors && (
-            <DropDown>
+            <Style.DropDown>
               {filteredFlavors.map((flavor) => (
-                <DropDownItem
+                <Style.DropDownItem
                   type="button"
                   key={uid()}
                   onClick={() => {
@@ -230,37 +142,37 @@ export function Form({
                   }}
                 >
                   {flavor}
-                </DropDownItem>
+                </Style.DropDownItem>
               ))}
-            </DropDown>
+            </Style.DropDown>
           )}
-        </FieldAndDropDown>
-      </SingleInputSection>
+        </Style.FieldAndDropDown>
+      </Style.SingleInputSection>
       {selectedFlavor && (
-        <FlavorTag
+        <Style.FlavorTag
           key={uid()}
           style={{
             backgroundColor: `var(--${selectedFlavor.toLowerCase()}-color)`,
           }}
         >
           {selectedFlavor}
-          <DeleteFlavorButton
+          <Style.DeleteFlavorButton
             type="button"
             onClick={() => {
               () => setSelectedFlavor("");
             }}
           >
             X
-          </DeleteFlavorButton>
-        </FlavorTag>
+          </Style.DeleteFlavorButton>
+        </Style.FlavorTag>
       )}
 
-      <SingleInputSection>
-        <LabelAndMessage>
-          <InputLabel htmlFor="input-url">Image-URL</InputLabel>
-          {urlMessage && <Message>Not an image URL</Message>}
-        </LabelAndMessage>
-        <InputField
+      <Style.SingleInputSection>
+        <Style.LabelAndMessage>
+          <Style.InputLabel htmlFor="input-url">Image-URL</Style.InputLabel>
+          {urlMessage && <Style.Message>Not an image URL</Style.Message>}
+        </Style.LabelAndMessage>
+        <Style.InputField
           type="url"
           id="input-url"
           name="url"
@@ -268,16 +180,18 @@ export function Form({
           onChange={handleUrlChange}
           // required
         />
-      </SingleInputSection>
-      <ButtonContainer>
-        <Button type="submit">Submit</Button>
-        <Button onClick={() => router.push("/ingredients")}>Cancel</Button>
+      </Style.SingleInputSection>
+      <Style.ButtonContainer>
+        <Style.Button type="submit">Submit</Style.Button>
+        <Style.Button onClick={() => router.push("/ingredients")}>
+          Cancel
+        </Style.Button>
         {ingredient && (
-          <DeleteButton type="button" onClick={handleClickDelete}>
+          <Style.DeleteButton type="button" onClick={handleClickDelete}>
             Delete
-          </DeleteButton>
+          </Style.DeleteButton>
         )}
-      </ButtonContainer>
-    </StyledForm>
+      </Style.ButtonContainer>
+    </Style.StyledForm>
   );
 }

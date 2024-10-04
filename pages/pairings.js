@@ -1,4 +1,4 @@
-import PairingsOverview from "@/components/PairingsOverview";
+import PairingsOverview from "@/components/PairingsOverview/PairingsOverview";
 
 export default function PairingsPage({
   pairings,
