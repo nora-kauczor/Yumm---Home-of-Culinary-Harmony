@@ -1,11 +1,7 @@
 import { getFlavorColor } from "@/utils/getFlavorColor";
 import * as Style from "./IngredientCard.style";
 
-export function IngredientCard({
-  ingredient,
-  filterIngredients,
-  deleteIngredient,
-}) {
+export function IngredientCard({ ingredient, filterIngredients }) {
   const flavorColor = getFlavorColor(ingredient.flavorProfile);
 
   return (
@@ -20,12 +16,6 @@ export function IngredientCard({
         {ingredient.flavorProfile}
       </Style.FlavorTag>
       <Style.EditAnchor href={`/form/${ingredient._id}`}>Edit</Style.EditAnchor>
-      <Style.DeleteButton
-        type="button"
-        onClick={() => deleteIngredient(ingredient)}
-      >
-        Delete
-      </Style.DeleteButton>
     </Style.CardWrapper>
   );
 }

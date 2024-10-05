@@ -16,9 +16,7 @@ export function IngredientDetails({ ingredient, deleteIngredient }) {
     <Style.DetailsContainer>
       <Style.NameAndTag>
         <Style.Name>{ingredient.name}</Style.Name>
-        <Style.FlavorTag
-        // style={{ backgroundColor: flavorColor }}
-        >
+        <Style.FlavorTag style={{ backgroundColor: flavorColor }}>
           {ingredient.flavorProfile}
         </Style.FlavorTag>
       </Style.NameAndTag>
@@ -31,7 +29,7 @@ export function IngredientDetails({ ingredient, deleteIngredient }) {
       />
       <Style.Description>{ingredient.description}</Style.Description>
       <Style.ButtonContainer>
-        <Style.BackButton href={"/ingredients"}>Back</Style.BackButton>
+        <Style.BackButton href={"/ingredients"}>◀︎ Back</Style.BackButton>
         <Style.EditButton href={`/form/${ingredient._id}`}>
           Edit
         </Style.EditButton>

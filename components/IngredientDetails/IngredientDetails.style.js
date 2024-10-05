@@ -17,12 +17,12 @@ export const NameAndTag = styled.p`
 
 export const Name = styled.h1`
   margin: 0;
-  padding: 10;
+  padding: 10px;
 `;
 
-export const FlavorTag = styled.p`
-  border-radius: 1rem;
-  padding: 10px;
+export const FlavorTag = styled.a`
+  border-radius: var(--primary-border-radius);
+  padding: var(--anchor-padding);
   margin: 0;
 `;
 
@@ -37,21 +37,20 @@ export const ButtonContainer = styled.div`
 `;
 
 export const BackButton = styled.a`
-  text-decoration: none;
+  border-radius: 0.5rem;
+  padding: var(--anchor-padding);
+  text-decoration: var(--button-anchor-text-decoration);
+  text-align: center;
+  font-size: 1rem;
   color: inherit;
   margin: 0;
 `;
 
 export const EditButton = styled.a`
-  text-decoration: none;
-  color: inherit;
-  margin: 0;
-`;
-
-export const DeleteButton = styled.button`
-  border-radius: 1rem;
-  padding: 10px;
-  text-decoration: none;
+  border-radius: var(--primary-border-radius);
+  padding: var(--anchor-padding);
+  text-decoration: var(--button-anchor-text-decoration);
   background-color: lightgrey;
   color: inherit;
+  text-align: center;
 `;
