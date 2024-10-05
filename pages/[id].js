@@ -1,5 +1,4 @@
-import { IngredientDetails } from "@/components/IngredientDetails";
-
+import { IngredientDetails } from "@/components/IngredientDetails/IngredientDetails";
 import { useRouter } from "next/router";
 
 export default function DetailsPage({ ingredients, deleteIngredient }) {

@@ -89,7 +89,11 @@ export function Form({
     userIngredient.flavorProfile = selectedFlavor;
     userIngredient._id = ingredient ? ingredient._id : uid();
     userIngredient.byUser = true;
-    ingredient ? editIngredient(userIngredient) : addIngredient(userIngredient);
+    if (ingredient) {
+      editIngredient(userIngredient);
+    } else {
+      addIngredient(userIngredient);
+    }
     router.push("/ingredients");
     // };
 

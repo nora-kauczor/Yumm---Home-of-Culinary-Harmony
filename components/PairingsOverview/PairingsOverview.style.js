@@ -1,4 +1,4 @@
-const { default: styled } = require("styled-components");
+import styled from "styled-components";
 
 export const PairingsList = styled.ul`
   list-style: none;

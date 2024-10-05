@@ -8,8 +8,8 @@ export default function PairingsPage({
   return (
     <PairingsOverview
       pairings={pairings}
-      ingredients={ingredients}
       filterIngredients={filterIngredients}
+      ingredients={ingredients}
     />
   );
 }

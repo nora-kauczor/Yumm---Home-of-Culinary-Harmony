@@ -14,7 +14,7 @@ export const CardWrapper = styled.ul`
   padding: 20px;
 `;
 
-const IngredientsSection = styled.ul`
+export const IngredientsSection = styled.ul`
   padding: 7px 0 0 0;
   margin: 0;
   display: flex;

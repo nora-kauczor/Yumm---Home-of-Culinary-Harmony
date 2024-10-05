@@ -25,8 +25,8 @@ export default function PairingCard({
 
   const ingredient0 = findIngredientById(pairing.ingredients[0]);
   const ingredient1 = findIngredientById(pairing.ingredients[1]);
-  const flavor0 = ingredient0.flavorProfile;
-  const flavor1 = ingredient1.flavorProfile;
+  const flavor0 = ingredient0?.flavorProfile || "";
+  const flavor1 = ingredient1?.flavorProfile || "";
   const color0 = getFlavorColor(flavor0);
   const color1 = getFlavorColor(flavor1);
 

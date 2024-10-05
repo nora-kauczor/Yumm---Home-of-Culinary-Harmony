@@ -1,6 +1,6 @@
 import Image from "next/image";
 import * as Style from "./IngredientDetails.style";
-import customImageLoader from "../utils/customImageLoader";
+import customImageLoader from "../../utils/customImageLoader";
 import { getFlavorColor } from "@/utils/getFlavorColor";
 import { useRouter } from "next/router";
 

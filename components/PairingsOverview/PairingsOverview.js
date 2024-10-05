@@ -5,7 +5,6 @@ import useLocalStorageState from "use-local-storage-state";
 import { initialPairings } from "@/lib/pairings";
 import { flavors } from "@/lib/ingredients";
 import { uid } from "uid";
-import { Solitreo } from "next/font/google";
 
 export default function PairingsOverview({ ingredients, filterIngredients }) {
   const [pairings, setPairings] = useLocalStorageState("pairings", {
